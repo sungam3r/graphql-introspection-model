@@ -10,8 +10,10 @@
     <Authors>Maximov Ivan</Authors>
     <Copyright>Copyright © $(Authors) 2019-$(CurrentYear)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageIcon>logo.64x64.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/sungam3r/graphql-introspection-model</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sungam3r/graphql-introspection-model</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   
 </Project>
