@@ -1,13 +1,13 @@
 <Project>
 
   <PropertyGroup>
-    <VersionPrefix>0.0.1</VersionPrefix>
+    <VersionPrefix>0.0.2</VersionPrefix>
     <LangVersion>latest</LangVersion>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
     <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
-    <Authors>sungam3r@yandex.ru</Authors>
+    <Authors>Maximov Ivan</Authors>
     <Copyright>Copyright © $(Authors) 2019-$(CurrentYear)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>logo.64x64.png</PackageIcon>
