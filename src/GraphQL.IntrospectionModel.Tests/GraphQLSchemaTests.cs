@@ -57,9 +57,9 @@ namespace GraphQL.IntrospectionModel.Tests
             sdl.ShouldBe(Read("person.graphql"));
         }
 
-        private string Read(string name)
+        private string Read(string fileName)
         {
-            return File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, name));
+            return File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName));
         }
     }
 }
