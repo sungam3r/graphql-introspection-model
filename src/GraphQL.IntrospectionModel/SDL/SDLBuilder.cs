@@ -111,8 +111,11 @@ namespace GraphQL.IntrospectionModel.SDL
             WriteDirectives();
             WriteSchema();
 
-            foreach (var type in _schema.Types.Where(t => !t.IsIntrospection).OrderBy(t => t.Name, StringComparer.Ordinal))
+            var typesToBuild = _schema.Types.Where(t => !t.IsIntrospection).OrderBy(t => t.Name, StringComparer.Ordinal).ToArray();
+            for (int i=0; i<typesToBuild.Length; ++i)
             {
+                var type = typesToBuild[i];
+
                 WriteDescription(type);
 
                 switch (type.Kind)
@@ -145,7 +148,8 @@ namespace GraphQL.IntrospectionModel.SDL
                         throw new NotSupportedException(type.Kind.ToString());
                 }
 
-                WriteLine();
+                if (i < typesToBuild.Length - 1)
+                    WriteLine();
             }
 
             return _buffer.ToString();
@@ -153,6 +157,9 @@ namespace GraphQL.IntrospectionModel.SDL
 
         private void WriteDirectives()
         {
+            if (_schema.Directives == null)
+                return;
+
             foreach (var directive in _schema.Directives.OrderBy(d => d.Name, StringComparer.Ordinal))
             {
                 if (IsStandardDirective(directive))
@@ -267,7 +274,7 @@ namespace GraphQL.IntrospectionModel.SDL
             {
                 WriteDescription(field);
 
-                if (field.Args?.All(arg => arg.Description == null && (arg.Directives?.Count ?? 0) == 0) == true)
+                if (field.Args == null || field.Args.All(arg => arg.Description == null && (arg.Directives?.Count ?? 0) == 0))
                 {
                     // if no field argument has descriptions and directives, then write the entire field signature in one line
                     WriteLine($"{field.Name}{Arguments(field)}: {field.Type.SDLType}{Deprecate(field)}{Directives(field)}", indent: Indent.Single);
