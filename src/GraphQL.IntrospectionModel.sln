@@ -16,6 +16,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphQL.IntrospectionModel"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL.IntrospectionModel.Tests", "GraphQL.IntrospectionModel.Tests\GraphQL.IntrospectionModel.Tests.csproj", "{A35D4C4D-63DF-4E86-B768-802EAD7F68C3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{13937FD5-D3E4-4E9C-ACEB-7D5B8C573292}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\labeler.yml = ..\.github\labeler.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{70528013-433D-48BC-A120-4A124F6DB03C}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\dotnetcore.yml = ..\.github\workflows\dotnetcore.yml
+		..\.github\workflows\greetings.yml = ..\.github\workflows\greetings.yml
+		..\.github\workflows\label.yml = ..\.github\workflows\label.yml
+		..\.github\workflows\stale.yml = ..\.github\workflows\stale.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +46,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{70528013-433D-48BC-A120-4A124F6DB03C} = {13937FD5-D3E4-4E9C-ACEB-7D5B8C573292}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1A6015B-A2E9-4E71-8AF2-0EA44D808433}
