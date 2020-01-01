@@ -90,7 +90,7 @@ namespace GraphQL.IntrospectionModel.SDL
                         return _options.DirectiveComments;
 
                     default:
-                        throw new NotSupportedException(element.GetType().Name);
+                        throw new NotSupportedException($"Unknown element '{element.GetType().Name}'");
                 }
             }
         }
