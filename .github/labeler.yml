@@ -1,12 +1,12 @@
 # Add label to any root file changes
 "area:repo":
-  - /*
+   - '.*'
   
 # Add label to any change within the 'SDL' folder
 "area:sdl":
-  - src/GraphQL.IntrospectionModel/SDL/*
+   - src/GraphQL.IntrospectionModel/SDL/*
 
 # Add label to any change to IntrospectionModel.Tests project
 "area:tests":
-  - src/GraphQL.IntrospectionModel.Tests/*
-  - src/GraphQL.IntrospectionModel.Tests/**/*
+   - src/GraphQL.IntrospectionModel.Tests/*
+   - src/GraphQL.IntrospectionModel.Tests/**/*
