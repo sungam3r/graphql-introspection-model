@@ -112,7 +112,7 @@ namespace GraphQL.IntrospectionModel.SDL
             WriteSchema();
 
             var typesToBuild = _schema.Types.Where(t => !t.IsIntrospection).OrderBy(t => t.Name, StringComparer.Ordinal).ToArray();
-            for (int i=0; i<typesToBuild.Length; ++i)
+            for (int i = 0; i < typesToBuild.Length; ++i)
             {
                 var type = typesToBuild[i];
 
