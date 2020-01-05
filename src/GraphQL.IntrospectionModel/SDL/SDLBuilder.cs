@@ -83,6 +83,7 @@ namespace GraphQL.IntrospectionModel.SDL
                     case GraphQLInputField _:
                         return _options.FieldComments;
 
+
                     case GraphQLArgument _:
                         return parent is GraphQLDirective ? _options.DirectiveComments : _options.ArgumentComments;
 

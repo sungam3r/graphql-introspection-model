@@ -54,6 +54,7 @@ namespace GraphQL.IntrospectionModel.Tests
 
             var sdl = SDLBuilder.Build(schema);
 
+
             sdl.ShouldBe(Read("person.graphql"));
         }
 
