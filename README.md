@@ -11,7 +11,7 @@
 
 Types for GraphQL [introspection](https://graphql.github.io/graphql-spec/June2018/#sec-Introspection) model. Used by [graphql-sdl-exporter](https://github.com/sungam3r/graphql-sdl-exporter).
 
-A GraphQL server supports introspection over its schema. This schema is queried using GraphQL itself, creating a powerful
+A GraphQL server sup ports introspection over its schema. This schema is queried using GraphQL itself, creating a powerful
 platform for tool‐building.
 
 Here's what a "classic" introspection query looks like:
