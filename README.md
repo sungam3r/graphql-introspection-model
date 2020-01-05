@@ -11,7 +11,7 @@
 
 Types for GraphQL [introspection](https://graphql.github.io/graphql-spec/June2018/#sec-Introspection) model. Used by [graphql-sdl-exporter](https://github.com/sungam3r/graphql-sdl-exporter).
 
-A GraphQL server sup ports introspection over its schema. This schema is queried using GraphQL itself, creating a powerful
+A GraphQL server supports introspection over its schema. This schema is queried using GraphQL itself, creating a powerful
 platform for tool‐building.
 
 Here's what a "classic" introspection query looks like:
@@ -132,3 +132,5 @@ SDL is simple and intuitive to use while being extremely powerful and expressive
 Many types in this project implement the [`IHasDirectives`](src/GraphQL.IntrospectionModel/IHasDirectives.cs) interface. It serves to obtain information
 about the directives applied to the element. The [official specification](https://graphql.github.io/graphql-spec/June2018/#) does not describe such a possibility,
 although [discussions](https://github.com/graphql/graphql-spec/issues/300) are underway to expand the specification to add this feature.
+[graphql-sdl-exporter](https://github.com/sungam3r/graphql-sdl-exporter/tree/master/samples) can get information about directives if the server
+[supports](https://github.com/sungam3r/graphql-introspection-model/blob/master/src/GraphQL.IntrospectionModel/IntrospectionQuery.cs#L102) this feature.
