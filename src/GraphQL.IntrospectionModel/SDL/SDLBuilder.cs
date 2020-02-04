@@ -358,6 +358,9 @@ namespace GraphQL.IntrospectionModel.SDL
 
             static string GetLiteral(GraphQLFieldType type, string value)
             {
+                if (value == null)
+                    return "null";
+
                 switch (type.Kind)
                 {
                     case GraphQLTypeKind.Non_Null:
