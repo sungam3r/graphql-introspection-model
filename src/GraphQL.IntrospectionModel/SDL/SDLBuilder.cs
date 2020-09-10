@@ -92,7 +92,7 @@ namespace GraphQL.IntrospectionModel.SDL
             if (element.Description != null && IsDescriptionAllowed())
             {
                 foreach (string line in element.Description.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
-                    WriteLine("# " + line, indent: GetElementIndent());
+                    WriteLine("# " + EscapeString(line), indent: GetElementIndent());
             }
 
             Indent GetElementIndent()
