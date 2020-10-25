@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-	<VersionPrefix>0.0.9-preview</VersionPrefix>
+	  <VersionPrefix>0.0.9-preview</VersionPrefix>
     <LangVersion>latest</LangVersion>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -12,9 +12,10 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageIcon>logo.64x64.png</PackageIcon>
-    <RepositoryUrl>https://github.com/sungam3r/graphql-introspection-model</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-	<DebugType>embedded</DebugType>
+    <DebugType>embedded</DebugType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <ItemGroup>
