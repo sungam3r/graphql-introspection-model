@@ -2,7 +2,8 @@ name: Publish release to Nuget registry
 
 on:
   release:
-    types: [published, edited]
+    types:
+      - published
 
 jobs:
   publish:
@@ -50,4 +51,4 @@ jobs:
             src/out/*
       - name: Publish Nuget packages to Nuget registry
         working-directory: src
-        run: dotnet nuget push "out/*" -k ${{secrets.NUGET_API_KEY}}
+        run: dotnet nuget push "out/*"
