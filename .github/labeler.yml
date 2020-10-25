@@ -9,3 +9,6 @@
 
 "code style":
   - .editorconfig
+
+"documentation":
+  - *.md
