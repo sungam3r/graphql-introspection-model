@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-    name: Run unit tests on ''${{ matrix.os }}''
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout source

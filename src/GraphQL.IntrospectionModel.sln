@@ -18,15 +18,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphQL.IntrospectionModel.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{13937FD5-D3E4-4E9C-ACEB-7D5B8C573292}"
 	ProjectSection(SolutionItems) = preProject
-		..\.github\ISSUE_TEMPLATE\bug_report.md = ..\.github\ISSUE_TEMPLATE\bug_report.md
 		..\.github\dependabot.yml = ..\.github\dependabot.yml
-		..\.github\ISSUE_TEMPLATE\feature_request.md = ..\.github\ISSUE_TEMPLATE\feature_request.md
 		..\.github\labeler.yml = ..\.github\labeler.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{70528013-433D-48BC-A120-4A124F6DB03C}"
 	ProjectSection(SolutionItems) = preProject
-		..\.github\workflows\greetings.yml = ..\.github\workflows\greetings.yml
 		..\.github\workflows\label.yml = ..\.github\workflows\label.yml
 		..\.github\workflows\stale.yml = ..\.github\workflows\stale.yml
 		..\.github\workflows\test.yml = ..\.github\workflows\test.yml

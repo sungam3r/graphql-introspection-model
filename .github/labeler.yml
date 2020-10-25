@@ -1,12 +1,8 @@
-# Add label to any root file changes
-"area:repo":
-  - ./*
-  
-# Add label to any change within the 'SDL' folder
-"area:sdl":
+"SDL":
   - src/GraphQL.IntrospectionModel/SDL/*
 
-# Add label to any change to IntrospectionModel.Tests project
-"area:tests":
-  - src/GraphQL.IntrospectionModel.Tests/*
+"tests":
   - src/GraphQL.IntrospectionModel.Tests/**/*
+
+"CI":
+  - .github/workflows/**/*
