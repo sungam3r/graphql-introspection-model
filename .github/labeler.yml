@@ -6,3 +6,6 @@
 
 "CI":
   - .github/workflows/**/*
+
+"code style":
+  - .editorconfig
