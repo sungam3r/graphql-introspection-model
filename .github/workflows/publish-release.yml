@@ -2,8 +2,7 @@ name: Publish release to Nuget registry
 
 on:
   release:
-    types:
-      - published
+    types: [published, edited]
 
 jobs:
   publish:
@@ -17,8 +16,10 @@ jobs:
           echo github.ref: ${{ github.ref }}
           exit 1
       - name: Set release version number
+        env:
+          github_ref: ${{ github.ref }}
         run: |
-          version="${github.ref:10}"
+          version="${github_ref:10}"
           echo version=$version
           echo "version=$version" >> $GITHUB_ENV
       - name: Use .NET Core 3.1 SDK
