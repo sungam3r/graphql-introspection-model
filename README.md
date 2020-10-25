@@ -1,4 +1,4 @@
-﻿# graphql-introspection-model
+# graphql-introspection-model
 
 ![License](https://img.shields.io/github/license/sungam3r/graphql-introspection-model)
 
@@ -10,6 +10,9 @@
 ![Activity](https://img.shields.io/github/commit-activity/y/sungam3r/graphql-introspection-model)
 
 ![Size](https://img.shields.io/github/repo-size/sungam3r/graphql-introspection-model)
+
+[![Build status](https://github.com/sungam3r/graphql-introspection-model/workflows/Publish%20preview%20to%20GitHub%20registry/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions?query=workflow%3A%22Publish+preview+to+GitHub+registry%22)
+[![Build status](https://github.com/sungam3r/graphql-introspection-model/workflows/Publish%20release%20to%20Nuget%20registry/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions?query=workflow%3A%22Publish+release+to+Nuget+registry%22)
 
 Types for GraphQL [introspection](https://graphql.github.io/graphql-spec/June2018/#sec-Introspection) model. Used by [graphql-sdl-exporter](https://github.com/sungam3r/graphql-sdl-exporter).
 
