@@ -22,6 +22,9 @@ jobs:
         with:
           dotnet-version: '3.1.x'
           source-url: https://nuget.pkg.github.com/sungam3r/index.json
+        # Error: The NUGET_AUTH_TOKEN environment variable was not provided. In this step, add the following: 
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Install dependencies
         working-directory: src
         run: dotnet restore
