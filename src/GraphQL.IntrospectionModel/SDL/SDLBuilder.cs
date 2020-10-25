@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text;
 
@@ -20,7 +20,7 @@ namespace GraphQL.IntrospectionModel.SDL
             Double = 2,
         }
 
-        private static readonly char[] EscapedCharacters = new char[] { '"', '\\', '\b', '\f', '\n', '\r', '\t' };
+        private static readonly char[] _escapedCharacters = new char[] { '"', '\\', '\b', '\f', '\n', '\r', '\t' };
         private readonly StringBuilder _buffer = new StringBuilder();
         private readonly GraphQLSchema _schema;
         private readonly SDLBuilderOptions _options;
@@ -34,7 +34,7 @@ namespace GraphQL.IntrospectionModel.SDL
         // https://graphql.github.io/graphql-spec/June2018/#sec-String-Value
         private static string EscapeString(string source)
         {
-            if (source.IndexOfAny(EscapedCharacters) == -1)
+            if (source.IndexOfAny(_escapedCharacters) == -1)
                 return source;
 
             var buffer = new StringBuilder(source.Length + 10);
