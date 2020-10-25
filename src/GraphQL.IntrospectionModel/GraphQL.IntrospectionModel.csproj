@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>GraphQL;Introspection;SDL</PackageTags>
     <Description>Types for GraphQL introspection model and building SDL</Description>
   </PropertyGroup>
