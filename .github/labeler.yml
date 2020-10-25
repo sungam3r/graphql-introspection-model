@@ -11,4 +11,4 @@
   - .editorconfig
 
 "documentation":
-  - *.md
+  - /*.md
