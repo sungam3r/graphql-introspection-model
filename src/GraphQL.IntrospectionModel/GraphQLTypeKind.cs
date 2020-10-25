@@ -12,7 +12,7 @@
         /// <summary> Scalar type. </summary>
         Scalar,
 
-        /// <summary> Enum type. </summary>
+        /// <summary> Enumeration type. </summary>
         Enum,
 
         /// <summary> A composite input type. </summary>
