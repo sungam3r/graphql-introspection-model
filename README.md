@@ -1,5 +1,7 @@
 ﻿# graphql-introspection-model
 
+![License](https://img.shields.io/github/license/sungam3r/graphql-introspection-model)
+
 [![NuGet](https://img.shields.io/nuget/v/GraphQL.IntrospectionModel)](https://www.nuget.org/packages/GraphQL.IntrospectionModel)
 [![Nuget](https://img.shields.io/nuget/dt/GraphQL.IntrospectionModel)](https://www.nuget.org/packages/GraphQL.IntrospectionModel)
 
