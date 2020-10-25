@@ -7,8 +7,14 @@ using Xunit;
 
 namespace GraphQL.IntrospectionModel.Tests
 {
+    /// <summary>
+    /// Basic tests for <see cref="GraphQLSchema"/>.
+    /// </summary>
     public class GraphQLSchemaTests
     {
+        /// <summary>
+        /// SDLBuilder should build simple schema.
+        /// </summary>
         [Fact]
         public void Person_Schema_Should_Be_Built()
         {
