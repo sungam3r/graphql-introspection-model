@@ -1,4 +1,4 @@
-﻿namespace GraphQL.IntrospectionModel.SDL
+namespace GraphQL.IntrospectionModel.SDL
 {
     /// <summary> Output options for creating SDL schemas. </summary>
     public sealed class SDLBuilderOptions

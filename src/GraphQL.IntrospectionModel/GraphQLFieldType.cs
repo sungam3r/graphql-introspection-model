@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace GraphQL.IntrospectionModel
 {
@@ -12,9 +12,9 @@ namespace GraphQL.IntrospectionModel
         /// <summary> Gets the SDL type of the field. </summary>
         public string SDLType => Kind switch
         {
-            GraphQLTypeKind.List     => $"[{OfType.SDLType}]",
+            GraphQLTypeKind.List => $"[{OfType.SDLType}]",
             GraphQLTypeKind.Non_Null => OfType.SDLType + "!",
-            _                        => Name
+            _ => Name
         };
     }
 }

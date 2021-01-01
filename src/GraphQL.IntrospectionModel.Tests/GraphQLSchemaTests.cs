@@ -1,8 +1,8 @@
-﻿using GraphQL.IntrospectionModel.SDL;
-using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using GraphQL.IntrospectionModel.SDL;
+using Shouldly;
 using Xunit;
 
 namespace GraphQL.IntrospectionModel.Tests

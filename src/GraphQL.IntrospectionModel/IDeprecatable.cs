@@ -1,4 +1,4 @@
-﻿namespace GraphQL.IntrospectionModel
+namespace GraphQL.IntrospectionModel
 {
     /// <summary> The interface for those parts of the schema that can be declared deprecated: https://graphql.github.io/graphql-spec/June2018/#sec--deprecated. </summary>
     public interface IDeprecatable

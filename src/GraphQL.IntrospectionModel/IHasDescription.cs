@@ -1,4 +1,4 @@
-﻿namespace GraphQL.IntrospectionModel
+namespace GraphQL.IntrospectionModel
 {
     /// <summary> Interface for parts of schema that have a description. </summary>
     public interface IHasDescription
