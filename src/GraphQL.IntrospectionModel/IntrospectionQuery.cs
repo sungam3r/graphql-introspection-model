@@ -1,4 +1,4 @@
-﻿namespace GraphQL.IntrospectionModel
+namespace GraphQL.IntrospectionModel
 {
     /// <summary> Query text for introspection request. See https://graphql.github.io/graphql-spec/June2018/#sec-Introspection </summary>
     public static class IntrospectionQuery

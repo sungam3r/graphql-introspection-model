@@ -1,4 +1,4 @@
-﻿namespace GraphQL.IntrospectionModel
+namespace GraphQL.IntrospectionModel
 {
     /// <summary> Kinds of types in the schema. </summary>
     public enum GraphQLTypeKind
