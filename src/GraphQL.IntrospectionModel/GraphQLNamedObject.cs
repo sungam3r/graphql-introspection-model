@@ -11,7 +11,7 @@ namespace GraphQL.IntrospectionModel
         /// <summary> Gets or sets the description of the element. </summary>
         public string Description { get; set; }
 
-        /// <summary> Gets or sets the set of directives for the element. </summary>
-        public ICollection<GraphQLDirectiveUsage> Directives { get; set; }
+        /// <summary> Gets or sets the set of directives applied to the element. </summary>
+        public ICollection<GraphQLAppliedDirective> AppliedDirectives { get; set; }
     }
 }

@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace GraphQL.IntrospectionModel
 {
-    /// <summary> 
+    /// <summary>
     /// Argument of the directive applied to some element in the schema.
     /// </summary>
     /// <remarks>

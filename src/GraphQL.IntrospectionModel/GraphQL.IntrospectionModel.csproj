@@ -6,8 +6,4 @@
     <Description>Types for GraphQL introspection model and building SDL</Description>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\assets\logo.64x64.png" Pack="true" PackagePath=""/>
-  </ItemGroup>
-
 </Project>
