@@ -9,6 +9,7 @@
 [![Publish release to Nuget registry](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-release.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-release.yml)
 [![CodeQL analysis](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/codeql-analysis.yml)
 
+[![codecov](https://codecov.io/gh/sungam3r/graphql-introspection-model/branch/master/graph/badge.svg?token=I98DQMW5EJ)](https://codecov.io/gh/sungam3r/graphql-introspection-model)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/sungam3r/graphql-introspection-model.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sungam3r/graphql-introspection-model/alerts/)
 [![Language grade: C#](https://img.shields.io/lgtm/grade/csharp/g/sungam3r/graphql-introspection-model.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sungam3r/graphql-introspection-model/context:csharp)
 
