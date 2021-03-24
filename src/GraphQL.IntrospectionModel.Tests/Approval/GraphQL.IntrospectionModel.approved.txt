@@ -1,5 +1,11 @@
 namespace GraphQL.IntrospectionModel
 {
+    public sealed class GraphQLAppliedDirective
+    {
+        public GraphQLAppliedDirective() { }
+        public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLDirectiveArgument> Args { get; set; }
+        public string Name { get; set; }
+    }
     public sealed class GraphQLArgument : GraphQL.IntrospectionModel.GraphQLNamedObject
     {
         public GraphQLArgument() { }
@@ -10,6 +16,7 @@ namespace GraphQL.IntrospectionModel
     {
         public GraphQLDirective() { }
         public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLArgument> Args { get; set; }
+        public bool IsRepeatable { get; set; }
         public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLDirectiveLocation> Locations { get; set; }
     }
     public sealed class GraphQLDirectiveArgument
@@ -38,12 +45,6 @@ namespace GraphQL.IntrospectionModel
         Enum_Value = 15,
         Input_Object = 16,
         Input_Field_Definition = 17,
-    }
-    public sealed class GraphQLDirectiveUsage
-    {
-        public GraphQLDirectiveUsage() { }
-        public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLDirectiveArgument> Args { get; set; }
-        public string Name { get; set; }
     }
     public sealed class GraphQLEnumValue : GraphQL.IntrospectionModel.GraphQLNamedObject, GraphQL.IntrospectionModel.IDeprecatable
     {
@@ -74,8 +75,8 @@ namespace GraphQL.IntrospectionModel
     public abstract class GraphQLNamedObject : GraphQL.IntrospectionModel.IHasDescription, GraphQL.IntrospectionModel.IHasDirectives
     {
         protected GraphQLNamedObject() { }
+        public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLAppliedDirective> AppliedDirectives { get; set; }
         public string Description { get; set; }
-        public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLDirectiveUsage> Directives { get; set; }
         public string Name { get; set; }
     }
     public sealed class GraphQLRequestType
@@ -83,9 +84,11 @@ namespace GraphQL.IntrospectionModel
         public GraphQLRequestType() { }
         public string Name { get; set; }
     }
-    public sealed class GraphQLSchema
+    public sealed class GraphQLSchema : GraphQL.IntrospectionModel.IHasDescription, GraphQL.IntrospectionModel.IHasDirectives
     {
         public GraphQLSchema() { }
+        public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLAppliedDirective> AppliedDirectives { get; set; }
+        public string Description { get; set; }
         public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLDirective> Directives { get; set; }
         public GraphQL.IntrospectionModel.GraphQLRequestType MutationType { get; set; }
         public GraphQL.IntrospectionModel.GraphQLRequestType QueryType { get; set; }
@@ -95,8 +98,8 @@ namespace GraphQL.IntrospectionModel
     public sealed class GraphQLType : GraphQL.IntrospectionModel.GraphQLTypeDescriptor, GraphQL.IntrospectionModel.IHasDescription, GraphQL.IntrospectionModel.IHasDirectives
     {
         public GraphQLType() { }
+        public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLAppliedDirective> AppliedDirectives { get; set; }
         public string Description { get; set; }
-        public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLDirectiveUsage> Directives { get; set; }
         public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLEnumValue> EnumValues { get; set; }
         public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLField> Fields { get; set; }
         public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLInputField> InputFields { get; set; }
@@ -132,7 +135,7 @@ namespace GraphQL.IntrospectionModel
     }
     public interface IHasDirectives
     {
-        System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLDirectiveUsage> Directives { get; set; }
+        System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLAppliedDirective> AppliedDirectives { get; set; }
     }
     public static class IntrospectionQuery
     {

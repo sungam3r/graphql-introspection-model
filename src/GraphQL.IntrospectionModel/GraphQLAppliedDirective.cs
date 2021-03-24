@@ -8,10 +8,10 @@ namespace GraphQL.IntrospectionModel
     /// but rather its application inside the schema. Only TypeSystemDirectiveLocation directives can be used this way.
     /// </summary>
     /// <remarks>
-    /// This is an experimental type, the official specification does not contain such a concept.
+    /// This is an experimental type, the official specification does not contain such a concept (yet).
     /// </remarks>
     [DebuggerDisplay("DirectiveUsage '{Name,nq}'")]
-    public sealed class GraphQLDirectiveUsage
+    public sealed class GraphQLAppliedDirective
     {
         /// <summary> Gets or sets the name of the applied directive. </summary>
         public string Name { get; set; }

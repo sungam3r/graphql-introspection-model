@@ -26,6 +26,6 @@ namespace GraphQL.IntrospectionModel
         public ICollection<GraphQLFieldType> PossibleTypes { get; set; }
 
         /// <summary> Gets or sets the set of directives for the type. </summary>
-        public ICollection<GraphQLDirectiveUsage> Directives { get; set; }
+        public ICollection<GraphQLAppliedDirective> AppliedDirectives { get; set; }
     }
 }

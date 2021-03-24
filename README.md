@@ -4,6 +4,14 @@
 
 ![License](https://img.shields.io/github/license/sungam3r/graphql-introspection-model)
 
+[![Run unit tests](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/test.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/test.yml)
+[![Publish preview to GitHub registry](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-preview.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-preview.yml)
+[![Publish release to Nuget registry](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-release.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-release.yml)
+[![CodeQL analysis](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/codeql-analysis.yml)
+
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/sungam3r/graphql-introspection-model.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sungam3r/graphql-introspection-model/alerts/)
+[![Language grade: C#](https://img.shields.io/lgtm/grade/csharp/g/sungam3r/graphql-introspection-model.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sungam3r/graphql-introspection-model/context:csharp)
+
 [![NuGet](https://img.shields.io/nuget/v/GraphQL.IntrospectionModel)](https://www.nuget.org/packages/GraphQL.IntrospectionModel)
 [![Nuget](https://img.shields.io/nuget/dt/GraphQL.IntrospectionModel)](https://www.nuget.org/packages/GraphQL.IntrospectionModel)
 
@@ -13,13 +21,6 @@
 
 ![Size](https://img.shields.io/github/repo-size/sungam3r/graphql-introspection-model)
 
-[![Build status](https://github.com/sungam3r/graphql-introspection-model/workflows/Publish%20preview%20to%20GitHub%20registry/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions)
-[![Build status](https://github.com/sungam3r/graphql-introspection-model/workflows/Publish%20release%20to%20Nuget%20registry/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions)
-[![CodeQL analysis](https://github.com/sungam3r/graphql-introspection-model/workflows/CodeQL%20analysis/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions?query=workflow%3A%22%22CodeQL+analysis%22%22)
-
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/sungam3r/graphql-introspection-model.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sungam3r/graphql-introspection-model/alerts/)
-[![Language grade: C#](https://img.shields.io/lgtm/grade/csharp/g/sungam3r/graphql-introspection-model.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sungam3r/graphql-introspection-model/context:csharp)
-
 Types for GraphQL [introspection](https://graphql.github.io/graphql-spec/June2018/#sec-Introspection) model. Used by [graphql-sdl-exporter](https://github.com/sungam3r/graphql-sdl-exporter).
 
 A GraphQL server supports introspection over its schema. This schema is queried using GraphQL itself, creating a powerful
@@ -27,66 +28,69 @@ platform for tool‐building.
 
 Here's what a "classic" introspection query looks like:
 ```graphql
-  query IntrospectionQuery {
-    __schema {
-      queryType { name }
-      mutationType { name }
-      subscriptionType { name }
-      types {
-        ...FullType
-      }
-      directives {
-        name
-        description
-        locations
-        args {
-          ...InputValue
-        }
-      }
+query IntrospectionQuery {
+  __schema {
+    queryType { name }
+    mutationType { name }
+    subscriptionType { name }
+    types {
+      ...FullType
     }
-  }
-
-  fragment FullType on __Type {
-    kind
-    name
-    description
-    fields(includeDeprecated: true) {
+    directives {
       name
       description
+      locations
       args {
         ...InputValue
       }
-      type {
-        ...TypeRef
-      }
-      isDeprecated
-      deprecationReason
-    }
-    inputFields {
-      ...InputValue
-    }
-    interfaces {
-      ...TypeRef
-    }
-    enumValues(includeDeprecated: true) {
-      name
-      description
-      isDeprecated
-      deprecationReason
-    }
-    possibleTypes {
-      ...TypeRef
     }
   }
+}
 
-  fragment InputValue on __InputValue {
+fragment FullType on __Type {
+  kind
+  name
+  description
+  fields(includeDeprecated: true) {
     name
     description
-    type { ...TypeRef }
-    defaultValue
+    args {
+      ...InputValue
+    }
+    type {
+      ...TypeRef
+    }
+    isDeprecated
+    deprecationReason
   }
+  inputFields {
+    ...InputValue
+  }
+  interfaces {
+    ...TypeRef
+  }
+  enumValues(includeDeprecated: true) {
+    name
+    description
+    isDeprecated
+    deprecationReason
+  }
+  possibleTypes {
+    ...TypeRef
+  }
+}
 
-  fragment TypeRef on __Type {
+fragment InputValue on __InputValue {
+  name
+  description
+  type { ...TypeRef }
+  defaultValue
+}
+
+fragment TypeRef on __Type {
+  kind
+  name
+  ofType {
     kind
     name
     ofType {
@@ -107,10 +111,6 @@ Here's what a "classic" introspection query looks like:
               ofType {
                 kind
                 name
-                ofType {
-                  kind
-                  name
-                }
               }
             }
           }
@@ -118,6 +118,7 @@ Here's what a "classic" introspection query looks like:
       }
     }
   }
+}
 ```
 
 The result of this query (like all other GraphQL queries) is JSON. You can deal with it directly or deserialize it into some data structures.

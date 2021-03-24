@@ -7,6 +7,7 @@ namespace GraphQL.IntrospectionModel
         public static readonly string Classic = @"
   query IntrospectionQuery {
     __schema {
+      description
       queryType { name }
       mutationType { name }
       subscriptionType { name }
@@ -102,6 +103,7 @@ namespace GraphQL.IntrospectionModel
         public static readonly string Modern = @"
   query IntrospectionQuery {
     __schema {
+      description
       queryType { name }
       mutationType { name }
       subscriptionType { name }
@@ -116,6 +118,7 @@ namespace GraphQL.IntrospectionModel
           ...InputValue
         }
       }
+      appliedDirectives { ...Info }
     }
   }
 
@@ -134,13 +137,7 @@ namespace GraphQL.IntrospectionModel
       }
       isDeprecated
       deprecationReason
-      directives {
-        name
-        args {
-          name
-          value
-        }
-      }
+      appliedDirectives { ...Info }
     }
     inputFields {
       ...InputValue
@@ -157,6 +154,7 @@ namespace GraphQL.IntrospectionModel
     possibleTypes {
       ...TypeRef
     }
+    appliedDirectives { ...Info }
   }
 
   fragment InputValue on __InputValue {
@@ -164,6 +162,15 @@ namespace GraphQL.IntrospectionModel
     description
     type { ...TypeRef }
     defaultValue
+    appliedDirectives { ...Info }
+  }
+
+  fragment Info on __AppliedDirective {
+    name
+    args {
+    name
+    value
+    }
   }
 
   fragment TypeRef on __Type {

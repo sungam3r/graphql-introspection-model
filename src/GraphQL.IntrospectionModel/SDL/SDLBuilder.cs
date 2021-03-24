@@ -211,14 +211,17 @@ namespace GraphQL.IntrospectionModel.SDL
 
                 if (directive.Args == null || directive.Args.Count == 0)
                 {
-                    WriteLine($"directive @{directive.Name} on");
+                    if (directive.IsRepeatable)
+                        WriteLine($"directive @{directive.Name} repeatable on");
+                    else
+                        WriteLine($"directive @{directive.Name} on");
                 }
                 else
                 {
-                    if (directive.Args.All(a => a.Description == null && (a.Directives?.Count ?? 0) == 0))
+                    if (directive.Args.All(a => a.Description == null && (a.AppliedDirectives?.Count ?? 0) == 0))
                     {
                         // if no directive argument has descriptions and directives, then write the entire signature of the directive in one line
-                        WriteLine($"directive @{directive.Name}(" + string.Join(", ", directive.Args.Select(arg => $"{arg.Name}: {arg.Type.SDLType}{Default(arg.DefaultValue)}")) + ") on");
+                        WriteLine($"directive @{directive.Name}(" + string.Join(", ", directive.Args.Select(arg => $"{arg.Name}: {arg.Type.SDLType}{Default(arg.DefaultValue)}")) + ") " + (directive.IsRepeatable ? "repeatable on" : "on"));
                     }
                     else
                     {
@@ -231,7 +234,10 @@ namespace GraphQL.IntrospectionModel.SDL
                             WriteLine($"{arg.Name}: {arg.Type.SDLType}{Default(arg.DefaultValue)}{Directives(arg)}", indent: Indent.Single);
                         }
 
-                        WriteLine(") on");
+                        if (directive.IsRepeatable)
+                            WriteLine(") repeatable on");
+                        else
+                            WriteLine(") on");
                     }
                 }
 
@@ -247,10 +253,10 @@ namespace GraphQL.IntrospectionModel.SDL
 
         private void WriteSchema()
         {
-            WriteLine("schema {");
+            WriteLine($"schema{Directives(_schema)} {{");
 
             if (_schema.QueryType != null)
-                WriteLine($"query: {_schema.QueryType.Name}", indent: Indent.Single); // generally speaking, query should always be according to the specification 
+                WriteLine($"query: {_schema.QueryType.Name}", indent: Indent.Single); // generally speaking, query should always be according to the specification
             if (_schema.MutationType != null)
                 WriteLine($"mutation: {_schema.MutationType.Name}", indent: Indent.Single);
             if (_schema.SubscriptionType != null)
@@ -316,7 +322,7 @@ namespace GraphQL.IntrospectionModel.SDL
             {
                 WriteDescription(field);
 
-                if (field.Args == null || field.Args.All(arg => arg.Description == null && (arg.Directives?.Count ?? 0) == 0))
+                if (field.Args == null || field.Args.All(arg => arg.Description == null && (arg.AppliedDirectives?.Count ?? 0) == 0))
                 {
                     // if no field argument has descriptions and directives, then write the entire field signature in one line
                     WriteLine($"{field.Name}{Arguments(field)}: {field.Type.SDLType}{Deprecate(field)}{Directives(field)}", indent: Indent.Single);
@@ -379,21 +385,21 @@ namespace GraphQL.IntrospectionModel.SDL
 
         private string Directives(IHasDirectives element)
         {
-            return !_options.Directives || (element.Directives?.Count ?? 0) == 0
+            return !_options.Directives || (element.AppliedDirectives?.Count ?? 0) == 0
                 ? string.Empty
-                : string.Concat(element.Directives.Select(d => $" @{d.Name}{Arguments(d)}"));
+                : string.Concat(element.AppliedDirectives.Select(d => $" @{d.Name}{Arguments(d)}"));
 
-            string Arguments(GraphQLDirectiveUsage usage)
+            string Arguments(GraphQLAppliedDirective applied)
             {
-                if (usage.Args == null || usage.Args.Count == 0)
+                if (applied.Args == null || applied.Args.Count == 0)
                     return string.Empty;
 
-                return $"({string.Join(", ", usage.Args.Select(a => $"{a.Name}: {ToLiteral(usage, a)}"))})";
+                return $"({string.Join(", ", applied.Args.Select(a => $"{a.Name}: {ToLiteral(applied, a)}"))})";
             }
 
-            string ToLiteral(GraphQLDirectiveUsage usage, GraphQLDirectiveArgument argument)
+            string ToLiteral(GraphQLAppliedDirective applied, GraphQLDirectiveArgument argument)
             {
-                var directive = _schema.Directives.First(d => d.Name == usage.Name);
+                var directive = _schema.Directives.First(d => d.Name == applied.Name);
                 var arg = directive.Args.First(a => a.Name == argument.Name);
                 return GetLiteral(arg.Type, argument.Value);
             }
