@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -20,6 +21,14 @@ namespace GraphQL.IntrospectionModel.SDL
             Double = 2,
         }
 
+        private static readonly List<string> _builtInScalars = new List<string>
+        {
+            "String",
+            "Boolean",
+            "Int",
+            "Float",
+            "ID"
+        };
         private static readonly char[] _escapedCharacters = new char[] { '"', '\\', '\b', '\f', '\n', '\r', '\t' };
         private readonly StringBuilder _buffer = new StringBuilder();
         private readonly GraphQLSchema _schema;
@@ -158,8 +167,6 @@ namespace GraphQL.IntrospectionModel.SDL
             {
                 var type = typesToBuild[i];
 
-                WriteDescription(type);
-
                 switch (type.Kind)
                 {
                     case GraphQLTypeKind.Enum:
@@ -189,9 +196,6 @@ namespace GraphQL.IntrospectionModel.SDL
                     default:
                         throw new NotSupportedException(type.Kind.ToString());
                 }
-
-                if (i < typesToBuild.Length - 1)
-                    WriteLine();
             }
 
             return _buffer.ToString();
@@ -221,7 +225,7 @@ namespace GraphQL.IntrospectionModel.SDL
                     if (directive.Args.All(a => a.Description == null && (a.AppliedDirectives?.Count ?? 0) == 0))
                     {
                         // if no directive argument has descriptions and directives, then write the entire signature of the directive in one line
-                        WriteLine($"directive @{directive.Name}(" + string.Join(", ", directive.Args.Select(arg => $"{arg.Name}: {arg.Type.SDLType}{Default(arg.DefaultValue)}")) + ") " + (directive.IsRepeatable ? "repeatable on" : "on"));
+                        WriteLine($"directive @{directive.Name}(" + string.Join(", ", directive.Args.Select(arg => $"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.Type, arg.DefaultValue)}")) + ") " + (directive.IsRepeatable ? "repeatable on" : "on"));
                     }
                     else
                     {
@@ -231,7 +235,7 @@ namespace GraphQL.IntrospectionModel.SDL
                         foreach (var arg in directive.Args)
                         {
                             WriteDescription(arg, directive);
-                            WriteLine($"{arg.Name}: {arg.Type.SDLType}{Default(arg.DefaultValue)}{Directives(arg)}", indent: Indent.Single);
+                            WriteLine($"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.Type, arg.DefaultValue)}{Directives(arg)}", indent: Indent.Single);
                         }
 
                         if (directive.IsRepeatable)
@@ -263,16 +267,22 @@ namespace GraphQL.IntrospectionModel.SDL
                 WriteLine($"subscription: {_schema.SubscriptionType.Name}", indent: Indent.Single);
 
             WriteLine("}");
-            WriteLine();
         }
 
         private void WriteScalar(GraphQLType type)
         {
-            WriteLine($"scalar {type.Name}{Directives(type)}");
+            if (!_options.OmitBuiltInScalars || !_builtInScalars.Contains(type.Name))
+            {
+                WriteLine();
+                WriteDescription(type);
+                WriteLine($"scalar {type.Name}{Directives(type)}");
+            }
         }
 
         private void WriteEnum(GraphQLType type)
         {
+            WriteLine();
+            WriteDescription(type);
             WriteLine($"enum {type.Name}{Directives(type)} {{");
 
             foreach (var enumValue in type.EnumValues)
@@ -286,12 +296,14 @@ namespace GraphQL.IntrospectionModel.SDL
 
         private void WriteInput(GraphQLType type)
         {
+            WriteLine();
+            WriteDescription(type);
             WriteLine($"input {type.Name}{Directives(type)} {{");
 
             foreach (var field in type.InputFields)
             {
                 WriteDescription(field);
-                WriteLine($"{field.Name}: {field.Type.SDLType}{Default(field.DefaultValue)}{Directives(field)}", indent: Indent.Single);
+                WriteLine($"{field.Name}: {field.Type.SDLType}{PrintDefault(field.Type, field.DefaultValue)}{Directives(field)}", indent: Indent.Single);
             }
 
             WriteLine("}");
@@ -299,6 +311,8 @@ namespace GraphQL.IntrospectionModel.SDL
 
         private void WriteInterface(GraphQLType type)
         {
+            WriteLine();
+            WriteDescription(type);
             WriteLine($"interface {type.Name}{Directives(type)} {{");
             WriteObjectOrInterfaceBody(type);
             WriteLine("}");
@@ -306,6 +320,8 @@ namespace GraphQL.IntrospectionModel.SDL
 
         private void WriteObject(GraphQLType type)
         {
+            WriteLine();
+            WriteDescription(type);
             WriteLine($"type {type.Name}{Implements(type)}{Directives(type)} {{");
             WriteObjectOrInterfaceBody(type);
             WriteLine("}");
@@ -313,6 +329,8 @@ namespace GraphQL.IntrospectionModel.SDL
 
         private void WriteUnion(GraphQLType type)
         {
+            WriteLine();
+            WriteDescription(type);
             WriteLine($"union {type.Name} = {string.Join(" | ", type.PossibleTypes.Select(t => t.Name))}{Directives(type)}");
         }
 
@@ -335,7 +353,7 @@ namespace GraphQL.IntrospectionModel.SDL
                     foreach (var arg in field.Args)
                     {
                         WriteDescription(arg);
-                        WriteLine($"{arg.Name}: {arg.Type.SDLType}{Default(arg.DefaultValue)}{Directives(arg)}", indent: Indent.Double);
+                        WriteLine($"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.Type, arg.DefaultValue)}{Directives(arg)}", indent: Indent.Double);
                     }
 
                     WriteLine($"): {field.Type.SDLType}{Deprecate(field)}{Directives(field)}", indent: Indent.Single);
@@ -353,20 +371,29 @@ namespace GraphQL.IntrospectionModel.SDL
         private static string Arguments(GraphQLField field)
         {
             return field.Args?.Count > 0
-                ? "(" + string.Join(", ", field.Args.Select(arg => $"{arg.Name}: {arg.Type.SDLType}{Default(arg.DefaultValue)}")) + ")"
+                ? "(" + string.Join(", ", field.Args.Select(arg => $"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.Type, arg.DefaultValue)}")) + ")"
                 : string.Empty;
         }
 
-        private static string Default(object defaultValue)
+        private static string PrintDefault(GraphQLFieldType type, string defaultValue)
+            => defaultValue == null ? string.Empty : $" = {Default(type, defaultValue)}";
+
+        private static string Default(GraphQLFieldType type, string value)
         {
-            // HACK https://github.com/graphql-dotnet/graphql-dotnet/issues/1055
-            if (defaultValue?.ToString() == "null")
-                return string.Empty;
+            if (value == null)
+                return "null";
 
-            if (defaultValue != null)
-                return $" = {defaultValue}";
+            switch (type.Kind)
+            {
+                case GraphQLTypeKind.Non_Null:
+                    return Default(type.OfType, value);
 
-            return string.Empty;
+                case GraphQLTypeKind.List:
+                    return $"[{Default(type.OfType, value)}]";
+
+                default:
+                    return value;
+            }
         }
 
         // https://graphql.github.io/graphql-spec/June2018/#sec--deprecated
@@ -401,38 +428,7 @@ namespace GraphQL.IntrospectionModel.SDL
             {
                 var directive = _schema.Directives.First(d => d.Name == applied.Name);
                 var arg = directive.Args.First(a => a.Name == argument.Name);
-                return GetLiteral(arg.Type, argument.Value);
-            }
-
-            static string GetLiteral(GraphQLFieldType type, string value)
-            {
-                if (value == null)
-                    return "null";
-
-                switch (type.Kind)
-                {
-                    case GraphQLTypeKind.Non_Null:
-                        return GetLiteral(type.OfType, value);
-
-                    case GraphQLTypeKind.List:
-                        return $"[{GetLiteral(type.OfType, value)}]";
-
-                    case GraphQLTypeKind.Scalar:
-                        switch (type.Name)
-                        {
-                            case "String":
-                            case "Uri":
-                            case "Id":
-                                return "\"" + value + "\"";
-
-                            default:
-                                return value;
-                        }
-
-                    case GraphQLTypeKind.Enum:
-                    default:
-                        return value; // TODO: let it be for now
-                }
+                return Default(arg.Type, argument.Value);
             }
         }
     }
