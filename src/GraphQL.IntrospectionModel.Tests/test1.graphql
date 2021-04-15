@@ -1,0 +1,62 @@
+# Отмеченное директивой поле может быть получено анонимным клиентом.
+directive @allowAnonymous on
+  | FIELD_DEFINITION
+
+# Отмеченное директивой поле может быть получено только аутентифицированным пользователем.
+directive @authenticate on
+  | FIELD_DEFINITION
+
+# Отмеченное директивой поле может быть получено только аутентифицированным пользователем с необходимыми правами доступа.
+directive @authorize(
+  # Идентификатор домена
+  domain: Int!
+  # Идентификатор операции
+  operationId: Int!
+  # Символьный код операции, используемый лишь для наглядности
+  operationCode: String
+) on
+  | FIELD_DEFINITION
+
+# Директива, которая обеспечивает проверку окрашенного токена.
+directive @checkPaintedToken(
+  # Путь с разделителем уровней вложенности в виде точки к input полю, содержащему идентификатор клиента.
+  pathToClientId: String!
+  # Идентификатор домена.
+  domain: Int
+  # Идентификатор операции.
+  operationId: Int
+  # Символьный код операции, используемый лишь для наглядности.
+  operationCode: String
+) on
+  | FIELD_DEFINITION
+
+# Отмеченное директивой поле может быть получено только после проведения процедуры контроля.
+directive @control(
+  # Наименование запроса для получения информационного сообщения.
+  getOperInfo: String!
+  # Наименование запроса на подтверждение обязательности выполнения контроля.
+  checkRequired: String
+) on
+  | FIELD_DEFINITION
+
+schema {
+  query: Query
+}
+
+input ClientInput {
+  id: Int!
+}
+
+input PaintedTokenInput {
+  client: ClientInput
+}
+
+type Query {
+  checkAllowAnonymous: String @allowAnonymous
+  checkAuthentication: String @authenticate
+  checkAuthorization: String @authorize(domain: 1, operationId: 10, operationCode: "TST.CheckAuthorization")
+  checkControl: String @control(getOperInfo: "getMessage", checkRequired: "isRequired")
+  checkControlWithoutCheckRequired: String @control(getOperInfo: "getMessage")
+  checkPaintedTokenWithPermission(scalarInput: Int, paintedToken: PaintedTokenInput): String @authorize(domain: 1, operationId: 10, operationCode: "TST.CheckAuthorization") @checkPaintedToken(pathToClientId: "paintedToken.client.id", domain: 1, operationId: 10, operationCode: "TST.CheckAuthorization")
+  checkPaintedTokenWithoutPermission(scalarInput: Int, clientId: Int): String @checkPaintedToken(pathToClientId: "clientId") @authorize(domain: 1, operationId: 10, operationCode: "TST.CheckAuthorization")
+}

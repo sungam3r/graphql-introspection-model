@@ -14,7 +14,7 @@ namespace GraphQL.IntrospectionModel
         /// <summary> Gets or sets the name of the argument. </summary>
         public string Name { get; set; }
 
-        /// <summary> Gets or sets the value of the argument. </summary>
+        /// <summary> Gets or sets a GraphQL-formatted string representing the default value for this argument. </summary>
         public string Value { get; set; }
     }
 }

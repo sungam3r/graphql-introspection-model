@@ -21,6 +21,17 @@ namespace GraphQL.IntrospectionModel.SDL
         /// <summary> Gets or sets a value indicating whether to output directives in the generated SDL. </summary>
         public bool Directives { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to omit built-in scalars from the generated SDL.
+        /// By default <see langword="true"/>.
+        ///<br/><br/>
+        /// From the spec:
+        /// <br/>
+        /// When representing a GraphQL schema using the type system definition language, the built‐in
+        /// scalar types should be omitted for brevity.
+        /// </summary>
+        public bool OmitBuiltInScalars { get; set; } = true;
+
         /// <summary> Gets or sets the size of the indentation in spaces in the generated SDL. </summary>
         public int IndentSize { get; set; } = 2;
     }

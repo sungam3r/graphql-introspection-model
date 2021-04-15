@@ -9,7 +9,7 @@ namespace GraphQL.IntrospectionModel
     public sealed class GraphQLArgument : GraphQL.IntrospectionModel.GraphQLNamedObject
     {
         public GraphQLArgument() { }
-        public object DefaultValue { get; set; }
+        public string DefaultValue { get; set; }
         public GraphQL.IntrospectionModel.GraphQLFieldType Type { get; set; }
     }
     public sealed class GraphQLDirective : GraphQL.IntrospectionModel.GraphQLNamedObject
@@ -69,7 +69,7 @@ namespace GraphQL.IntrospectionModel
     public sealed class GraphQLInputField : GraphQL.IntrospectionModel.GraphQLNamedObject
     {
         public GraphQLInputField() { }
-        public object DefaultValue { get; set; }
+        public string DefaultValue { get; set; }
         public GraphQL.IntrospectionModel.GraphQLFieldType Type { get; set; }
     }
     public abstract class GraphQLNamedObject : GraphQL.IntrospectionModel.IHasDescription, GraphQL.IntrospectionModel.IHasDirectives
@@ -159,6 +159,7 @@ namespace GraphQL.IntrospectionModel.SDL
         public bool EnumValuesComments { get; set; }
         public bool FieldComments { get; set; }
         public int IndentSize { get; set; }
+        public bool OmitBuiltInScalars { get; set; }
         public bool TypeComments { get; set; }
     }
 }
