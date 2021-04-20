@@ -288,7 +288,7 @@ namespace GraphQL.IntrospectionModel.SDL
             foreach (var enumValue in type.EnumValues)
             {
                 WriteDescription(enumValue);
-                WriteLine($"{enumValue.Name}{Deprecate(enumValue)}{Directives(enumValue)}", indent: Indent.Single);
+                WriteLine($"{enumValue.Name}{Directives(enumValue)}", indent: Indent.Single);
             }
 
             WriteLine("}");
@@ -343,7 +343,7 @@ namespace GraphQL.IntrospectionModel.SDL
                 if (field.Args == null || field.Args.All(arg => arg.Description == null && (arg.AppliedDirectives?.Count ?? 0) == 0))
                 {
                     // if no field argument has descriptions and directives, then write the entire field signature in one line
-                    WriteLine($"{field.Name}{Arguments(field)}: {field.Type.SDLType}{Deprecate(field)}{Directives(field)}", indent: Indent.Single);
+                    WriteLine($"{field.Name}{Arguments(field)}: {field.Type.SDLType}{Directives(field)}", indent: Indent.Single);
                 }
                 else
                 {
@@ -356,7 +356,7 @@ namespace GraphQL.IntrospectionModel.SDL
                         WriteLine($"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.Type, arg.DefaultValue)}{Directives(arg)}", indent: Indent.Double);
                     }
 
-                    WriteLine($"): {field.Type.SDLType}{Deprecate(field)}{Directives(field)}", indent: Indent.Single);
+                    WriteLine($"): {field.Type.SDLType}{Directives(field)}", indent: Indent.Single);
                 }
             }
         }
@@ -396,25 +396,39 @@ namespace GraphQL.IntrospectionModel.SDL
             }
         }
 
-        // https://graphql.github.io/graphql-spec/June2018/#sec--deprecated
-        private static string Deprecate(IDeprecatable deprecatable)
-        {
-            if (deprecatable.IsDeprecated)
-            {
-                if (deprecatable.DeprecationReason != null)
-                    return $" @deprecated(reason: \"{EscapeString(deprecatable.DeprecationReason)}\")";
-                else
-                    return " @deprecated";
-            }
-
-            return string.Empty;
-        }
-
         private string Directives(IHasDirectives element)
         {
-            return !_options.Directives || (element.AppliedDirectives?.Count ?? 0) == 0
-                ? string.Empty
-                : string.Concat(element.AppliedDirectives.Select(d => $" @{d.Name}{Arguments(d)}"));
+            if (!_options.Directives)
+                return string.Empty;
+
+            bool supportsAppliedDirectives = element.AppliedDirectives != null;
+
+            // In case of applied directives (if the server supports them) @deprecated should be always among AppliedDirectives
+            // because AppliedDirectives is non-null field.
+            if (supportsAppliedDirectives)
+            {
+                return element.AppliedDirectives.Count == 0
+                    ? string.Empty
+                    : string.Concat(element.AppliedDirectives.Select(d => $" @{d.Name}{Arguments(d)}"));
+            }
+            // Else fall back to print only @deprecated
+            else if (element is IDeprecatable deprecatable)
+            {
+                // https://graphql.github.io/graphql-spec/June2018/#sec--deprecated
+                if (deprecatable.IsDeprecated)
+                {
+                    if (deprecatable.DeprecationReason != null)
+                        return $" @deprecated(reason: \"{EscapeString(deprecatable.DeprecationReason)}\")";
+                    else
+                        return " @deprecated";
+                }
+
+                return string.Empty;
+            }
+            else
+            {
+                return string.Empty;
+            }
 
             string Arguments(GraphQLAppliedDirective applied)
             {
