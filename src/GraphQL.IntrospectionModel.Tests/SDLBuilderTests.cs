@@ -8,16 +8,13 @@ using Xunit;
 
 namespace GraphQL.IntrospectionModel.Tests
 {
-    /// <summary>
-    /// Basic tests for <see cref="GraphQLSchema"/>.
-    /// </summary>
-    public class GraphQLSchemaTests
+    public class SDLBuilderTests
     {
         /// <summary>
         /// SDLBuilder should build schema from introspection response.
         /// </summary>
         [Fact]
-        public void SDLBuilder_Should_Build_Schema_From_Introspection()
+        public void Should_Build_Schema_From_Introspection()
         {
             string introspection = Read("test1.json");
             var schemaJson = JObject.Parse(introspection).Property("__schema").Value;
@@ -30,7 +27,7 @@ namespace GraphQL.IntrospectionModel.Tests
         /// SDLBuilder should build simple schema.
         /// </summary>
         [Fact]
-        public void Person_Schema_Should_Be_Built()
+        public void Should_Build_Person_Schema()
         {
             var schema = new GraphQLSchema
             {
@@ -75,6 +72,59 @@ namespace GraphQL.IntrospectionModel.Tests
             var sdl = SDLBuilder.Build(schema);
 
             sdl.ShouldBe(Read("person.graphql"));
+        }
+
+        [Fact]
+        public void Should_Build_Schema_With_Multiple_Interfaces()
+        {
+            var schema = new GraphQLSchema
+            {
+                QueryType = new GraphQLRequestType
+                {
+                    Name = "Person"
+                },
+                Types = new List<GraphQLType>
+                {
+                    new GraphQLType
+                    {
+                        Name = "IPerson1",
+                        Kind = GraphQLTypeKind.Interface
+                    },
+                    new GraphQLType
+                    {
+                        Name = "IPerson2",
+                        Kind = GraphQLTypeKind.Interface
+                    },
+                    new GraphQLType
+                    {
+                        Name = "IPerson3",
+                        Kind = GraphQLTypeKind.Interface
+                    },
+                    new GraphQLType
+                    {
+                        Name = "Person",
+                        Interfaces = new List<GraphQLFieldType>
+                        {
+                            new GraphQLFieldType
+                            {
+                                Name = "IPerson1"
+                            },
+                            new GraphQLFieldType
+                            {
+                                Name = "IPerson2"
+                            },
+                            new GraphQLFieldType
+                            {
+                                Name = "IPerson3"
+                            },
+                        }
+                    }
+                }
+            };
+
+            var sdl = SDLBuilder.Build(schema);
+
+            sdl.ShouldBe(Read("interfaces.graphql"));
         }
 
         private string Read(string fileName)

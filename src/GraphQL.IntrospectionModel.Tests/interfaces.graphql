@@ -1,0 +1,15 @@
+schema {
+  query: Person
+}
+
+interface IPerson1 {
+}
+
+interface IPerson2 {
+}
+
+interface IPerson3 {
+}
+
+type Person implements IPerson1 & IPerson2 & IPerson3 {
+}

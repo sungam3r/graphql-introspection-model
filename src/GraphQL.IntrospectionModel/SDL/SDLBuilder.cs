@@ -336,27 +336,30 @@ namespace GraphQL.IntrospectionModel.SDL
 
         private void WriteObjectOrInterfaceBody(GraphQLType type)
         {
-            foreach (var field in type.Fields)
+            if (type.Fields != null)
             {
-                WriteDescription(field);
-
-                if (field.Args == null || field.Args.All(arg => arg.Description == null && (arg.AppliedDirectives?.Count ?? 0) == 0))
+                foreach (var field in type.Fields)
                 {
-                    // if no field argument has descriptions and directives, then write the entire field signature in one line
-                    WriteLine($"{field.Name}{Arguments(field)}: {field.Type.SDLType}{Deprecate(field)}{Directives(field)}", indent: Indent.Single);
-                }
-                else
-                {
-                    // otherwise write each argument on a separate line
-                    WriteLine($"{field.Name}(", indent: Indent.Single);
+                    WriteDescription(field);
 
-                    foreach (var arg in field.Args)
+                    if (field.Args == null || field.Args.All(arg => arg.Description == null && (arg.AppliedDirectives?.Count ?? 0) == 0))
                     {
-                        WriteDescription(arg);
-                        WriteLine($"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.Type, arg.DefaultValue)}{Directives(arg)}", indent: Indent.Double);
+                        // if no field argument has descriptions and directives, then write the entire field signature in one line
+                        WriteLine($"{field.Name}{Arguments(field)}: {field.Type.SDLType}{Deprecate(field)}{Directives(field)}", indent: Indent.Single);
                     }
+                    else
+                    {
+                        // otherwise write each argument on a separate line
+                        WriteLine($"{field.Name}(", indent: Indent.Single);
 
-                    WriteLine($"): {field.Type.SDLType}{Deprecate(field)}{Directives(field)}", indent: Indent.Single);
+                        foreach (var arg in field.Args)
+                        {
+                            WriteDescription(arg);
+                            WriteLine($"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.Type, arg.DefaultValue)}{Directives(arg)}", indent: Indent.Double);
+                        }
+
+                        WriteLine($"): {field.Type.SDLType}{Deprecate(field)}{Directives(field)}", indent: Indent.Single);
+                    }
                 }
             }
         }
@@ -364,7 +367,7 @@ namespace GraphQL.IntrospectionModel.SDL
         private static string Implements(GraphQLType type)
         {
             return type.Interfaces?.Count > 0
-                ? $" implements {string.Join(", ", type.Interfaces.Select(i => i.Name))}"
+                ? $" implements {string.Join(" & ", type.Interfaces.Select(i => i.Name))}"
                 : string.Empty;
         }
 
