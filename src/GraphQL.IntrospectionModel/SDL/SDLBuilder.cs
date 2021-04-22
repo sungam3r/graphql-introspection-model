@@ -336,6 +336,9 @@ namespace GraphQL.IntrospectionModel.SDL
 
         private void WriteObjectOrInterfaceBody(GraphQLType type)
         {
+            if (type.Fields == null)
+                return;
+
             foreach (var field in type.Fields)
             {
                 WriteDescription(field);
@@ -364,7 +367,7 @@ namespace GraphQL.IntrospectionModel.SDL
         private static string Implements(GraphQLType type)
         {
             return type.Interfaces?.Count > 0
-                ? $" implements {string.Join(", ", type.Interfaces.Select(i => i.Name))}"
+                ? $" implements {string.Join(" & ", type.Interfaces.Select(i => i.Name))}"
                 : string.Empty;
         }
 
