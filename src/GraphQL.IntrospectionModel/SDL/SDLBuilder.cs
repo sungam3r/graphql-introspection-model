@@ -353,11 +353,11 @@ namespace GraphQL.IntrospectionModel.SDL
                     // otherwise write each argument on a separate line
                     WriteLine($"{field.Name}(", indent: Indent.Single);
 
-                        foreach (var arg in field.Args)
-                        {
-                            WriteDescription(arg);
-                            WriteLine($"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.Type, arg.DefaultValue)}{Directives(arg)}", indent: Indent.Double);
-                        }
+                    foreach (var arg in field.Args)
+                    {
+                        WriteDescription(arg);
+                        WriteLine($"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.Type, arg.DefaultValue)}{Directives(arg)}", indent: Indent.Double);
+                    }
 
                     WriteLine($"): {field.Type.SDLType}{Directives(field)}", indent: Indent.Single);
                 }
