@@ -225,7 +225,7 @@ namespace GraphQL.IntrospectionModel.SDL
                     if (directive.Args.All(a => a.Description == null && (a.AppliedDirectives?.Count ?? 0) == 0))
                     {
                         // if no directive argument has descriptions and directives, then write the entire signature of the directive in one line
-                        WriteLine($"directive @{directive.Name}(" + string.Join(", ", directive.Args.Select(arg => $"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.Type, arg.DefaultValue)}")) + ") " + (directive.IsRepeatable ? "repeatable on" : "on"));
+                        WriteLine($"directive @{directive.Name}(" + string.Join(", ", directive.Args.Select(arg => $"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.DefaultValue)}")) + ") " + (directive.IsRepeatable ? "repeatable on" : "on"));
                     }
                     else
                     {
@@ -235,7 +235,7 @@ namespace GraphQL.IntrospectionModel.SDL
                         foreach (var arg in directive.Args)
                         {
                             WriteDescription(arg, directive);
-                            WriteLine($"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.Type, arg.DefaultValue)}{Directives(arg)}", indent: Indent.Single);
+                            WriteLine($"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.DefaultValue)}{Directives(arg)}", indent: Indent.Single);
                         }
 
                         if (directive.IsRepeatable)
@@ -303,7 +303,7 @@ namespace GraphQL.IntrospectionModel.SDL
             foreach (var field in type.InputFields)
             {
                 WriteDescription(field);
-                WriteLine($"{field.Name}: {field.Type.SDLType}{PrintDefault(field.Type, field.DefaultValue)}{Directives(field)}", indent: Indent.Single);
+                WriteLine($"{field.Name}: {field.Type.SDLType}{PrintDefault(field.DefaultValue)}{Directives(field)}", indent: Indent.Single);
             }
 
             WriteLine("}");
@@ -356,7 +356,7 @@ namespace GraphQL.IntrospectionModel.SDL
                     foreach (var arg in field.Args)
                     {
                         WriteDescription(arg);
-                        WriteLine($"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.Type, arg.DefaultValue)}{Directives(arg)}", indent: Indent.Double);
+                        WriteLine($"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.DefaultValue)}{Directives(arg)}", indent: Indent.Double);
                     }
 
                     WriteLine($"): {field.Type.SDLType}{Directives(field)}", indent: Indent.Single);
@@ -374,30 +374,12 @@ namespace GraphQL.IntrospectionModel.SDL
         private static string Arguments(GraphQLField field)
         {
             return field.Args?.Count > 0
-                ? "(" + string.Join(", ", field.Args.Select(arg => $"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.Type, arg.DefaultValue)}")) + ")"
+                ? "(" + string.Join(", ", field.Args.Select(arg => $"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.DefaultValue)}")) + ")"
                 : string.Empty;
         }
 
-        private static string PrintDefault(GraphQLFieldType type, string defaultValue)
-            => defaultValue == null ? string.Empty : $" = {Default(type, defaultValue)}";
-
-        private static string Default(GraphQLFieldType type, string value)
-        {
-            if (value == null)
-                return "null";
-
-            switch (type.Kind)
-            {
-                case GraphQLTypeKind.Non_Null:
-                    return Default(type.OfType, value);
-
-                case GraphQLTypeKind.List:
-                    return $"[{Default(type.OfType, value)}]";
-
-                default:
-                    return value;
-            }
-        }
+        private static string PrintDefault(string defaultValue)
+            => defaultValue == null ? string.Empty : $" = {defaultValue}";
 
         private string Directives(IHasDirectives element)
         {
@@ -445,7 +427,7 @@ namespace GraphQL.IntrospectionModel.SDL
             {
                 var directive = _schema.Directives.First(d => d.Name == applied.Name);
                 var arg = directive.Args.First(a => a.Name == argument.Name);
-                return Default(arg.Type, argument.Value);
+                return argument.Value ?? "null";
             }
         }
     }
