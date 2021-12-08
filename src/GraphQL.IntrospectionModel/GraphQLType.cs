@@ -8,24 +8,24 @@ namespace GraphQL.IntrospectionModel
     public sealed class GraphQLType : GraphQLTypeDescriptor, IHasDescription, IHasDirectives
     {
         /// <summary> Gets or sets the type description. </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary> Gets or sets the set of all type fields. Used for OBJECT. </summary>
-        public ICollection<GraphQLField> Fields { get; set; }
+        public ICollection<GraphQLField>? Fields { get; set; }
 
         /// <summary> Gets or sets the set of all type fields. Used for INPUT_OBJECT. </summary>
-        public ICollection<GraphQLInputField> InputFields { get; set; }
+        public ICollection<GraphQLInputField> InputFields { get; set; } = null!;
 
         /// <summary> Gets or sets the set of interfaces implemented by this type. Used for OBJECT. </summary>
-        public ICollection<GraphQLFieldType> Interfaces { get; set; }
+        public ICollection<GraphQLFieldType>? Interfaces { get; set; }
 
         /// <summary> Gets or sets the enumeration values. Used for ENUM. </summary>
-        public ICollection<GraphQLEnumValue> EnumValues { get; set; }
+        public ICollection<GraphQLEnumValue> EnumValues { get; set; } = null!;
 
         /// <summary> Gets or sets the possible values for the type. Used for UNION. </summary>
-        public ICollection<GraphQLFieldType> PossibleTypes { get; set; }
+        public ICollection<GraphQLFieldType>? PossibleTypes { get; set; }
 
         /// <summary> Gets or sets the set of directives for the type. </summary>
-        public ICollection<GraphQLAppliedDirective> AppliedDirectives { get; set; }
+        public ICollection<GraphQLAppliedDirective>? AppliedDirectives { get; set; }
     }
 }

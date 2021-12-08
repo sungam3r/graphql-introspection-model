@@ -4,6 +4,6 @@ namespace GraphQL.IntrospectionModel
     public interface IHasDescription
     {
         /// <summary> Gets or sets the item description. </summary>
-        string Description { get; set; }
+        string? Description { get; set; }
     }
 }

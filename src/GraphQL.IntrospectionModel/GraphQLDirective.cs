@@ -11,10 +11,10 @@ namespace GraphQL.IntrospectionModel
     public sealed class GraphQLDirective : GraphQLNamedObject
     {
         /// <summary> Gets or sets the possible locations of this directive in the schema. </summary>
-        public ICollection<GraphQLDirectiveLocation> Locations { get; set; }
+        public ICollection<GraphQLDirectiveLocation> Locations { get; set; } = null!;
 
         /// <summary> Gets or sets the argument list of the directive. </summary>
-        public ICollection<GraphQLArgument> Args { get; set; }
+        public ICollection<GraphQLArgument>? Args { get; set; }
 
         /// <summary> A boolean that indicates if the directive may be used repeatedly at a single location. </summary>
         public bool IsRepeatable { get; set; }

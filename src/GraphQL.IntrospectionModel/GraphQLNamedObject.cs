@@ -6,12 +6,12 @@ namespace GraphQL.IntrospectionModel
     public abstract class GraphQLNamedObject : IHasDescription, IHasDirectives
     {
         /// <summary> Gets or sets the name of the element. </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         /// <summary> Gets or sets the description of the element. </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary> Gets or sets the set of directives applied to the element. </summary>
-        public ICollection<GraphQLAppliedDirective> AppliedDirectives { get; set; }
+        public ICollection<GraphQLAppliedDirective>? AppliedDirectives { get; set; }
     }
 }

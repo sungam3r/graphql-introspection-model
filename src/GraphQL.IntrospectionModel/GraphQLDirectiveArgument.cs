@@ -12,9 +12,9 @@ namespace GraphQL.IntrospectionModel
     public sealed class GraphQLDirectiveArgument
     {
         /// <summary> Gets or sets the name of the argument. </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         /// <summary> Gets or sets a GraphQL-formatted string representing the default value for this argument. </summary>
-        public string Value { get; set; }
+        public string? Value { get; set; }
     }
 }

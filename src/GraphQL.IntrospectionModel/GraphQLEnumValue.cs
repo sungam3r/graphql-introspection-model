@@ -10,6 +10,6 @@ namespace GraphQL.IntrospectionModel
         public bool IsDeprecated { get; set; }
 
         /// <summary> Gets or sets the reason for why value is deprecated. </summary>
-        public string DeprecationReason { get; set; }
+        public string? DeprecationReason { get; set; }
     }
 }

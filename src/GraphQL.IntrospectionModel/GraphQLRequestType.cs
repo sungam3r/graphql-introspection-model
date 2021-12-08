@@ -7,6 +7,6 @@ namespace GraphQL.IntrospectionModel
     public sealed class GraphQLRequestType
     {
         /// <summary> Gets or sets the type name of the GraphQL request: query/mutation/subscription. </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

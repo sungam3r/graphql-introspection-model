@@ -17,9 +17,9 @@ namespace GraphQL.IntrospectionModel.Tests
         public void Should_Build_Schema_From_Introspection()
         {
             string introspection = Read("test1.json");
-            var schemaJson = JObject.Parse(introspection).Property("__schema").Value;
+            var schemaJson = JObject.Parse(introspection).Property("__schema")!.Value;
             var schema = schemaJson.ToObject<GraphQLSchema>();
-            string sdl = SDLBuilder.Build(schema);
+            string sdl = SDLBuilder.Build(schema!);
             sdl.ShouldBe(Read("test1.graphql"));
         }
 
