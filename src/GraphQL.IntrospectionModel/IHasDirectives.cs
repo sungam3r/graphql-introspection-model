@@ -6,6 +6,6 @@ namespace GraphQL.IntrospectionModel
     public interface IHasDirectives
     {
         /// <summary> Gets or sets the set of directives applied to the element. </summary>
-        ICollection<GraphQLAppliedDirective> AppliedDirectives { get; set; }
+        ICollection<GraphQLAppliedDirective>? AppliedDirectives { get; set; }
     }
 }

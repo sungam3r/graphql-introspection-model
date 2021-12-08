@@ -81,7 +81,7 @@ namespace GraphQL.IntrospectionModel.SDL
             return buffer.ToString();
         }
 
-        private void WriteLine(string text = null, Indent indent = Indent.None)
+        private void WriteLine(string? text = null, Indent indent = Indent.None)
         {
             if (text != null)
             {
@@ -96,7 +96,7 @@ namespace GraphQL.IntrospectionModel.SDL
             }
         }
 
-        private void WriteDescription(IHasDescription element, object parent = null)
+        private void WriteDescription(IHasDescription element, object? parent = null)
         {
             if (element.Description != null && IsDescriptionAllowed())
             {
@@ -378,7 +378,7 @@ namespace GraphQL.IntrospectionModel.SDL
                 : string.Empty;
         }
 
-        private static string PrintDefault(string defaultValue)
+        private static string PrintDefault(string? defaultValue)
             => defaultValue == null ? string.Empty : $" = {defaultValue}";
 
         private string Directives(IHasDirectives element)
@@ -386,11 +386,9 @@ namespace GraphQL.IntrospectionModel.SDL
             if (!_options.Directives)
                 return string.Empty;
 
-            bool supportsAppliedDirectives = element.AppliedDirectives != null;
-
             // In case of applied directives (if the server supports them) @deprecated should be always among AppliedDirectives
             // because AppliedDirectives is non-null field.
-            if (supportsAppliedDirectives)
+            if (element.AppliedDirectives != null)
             {
                 return element.AppliedDirectives.Count == 0
                     ? string.Empty

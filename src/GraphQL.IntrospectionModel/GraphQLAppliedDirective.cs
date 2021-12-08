@@ -14,9 +14,9 @@ namespace GraphQL.IntrospectionModel
     public sealed class GraphQLAppliedDirective
     {
         /// <summary> Gets or sets the name of the applied directive. </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         /// <summary> Gets or sets the argument list (argument names and values) of the applied directive. </summary>
-        public ICollection<GraphQLDirectiveArgument> Args { get; set; }
+        public ICollection<GraphQLDirectiveArgument>? Args { get; set; }
     }
 }

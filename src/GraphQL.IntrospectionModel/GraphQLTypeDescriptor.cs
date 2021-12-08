@@ -9,7 +9,7 @@ namespace GraphQL.IntrospectionModel
         public GraphQLTypeKind Kind { get; set; }
 
         /// <summary> Gets or sets the type name. </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         /// <summary> Gets a value indicating whether the type is introspection type. </summary>
         public bool IsIntrospection => Name?.StartsWith("__", StringComparison.Ordinal) == true;
