@@ -13,6 +13,7 @@ namespace GraphQL.IntrospectionModel
         Fragment_Definition,
         Fragment_Spread,
         Inline_Fragment,
+        Variable_Definition,
 
         // TypeSystemDirectiveLocation
         Schema,
