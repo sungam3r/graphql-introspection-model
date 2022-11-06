@@ -30,7 +30,7 @@ jobs:
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v3.0.3
         with:
-          dotnet-version: "6.0.x"
+          dotnet-version: 6.0.x
           source-url: https://api.nuget.org/v3/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.NUGET_API_KEY}}
@@ -60,10 +60,10 @@ jobs:
             console.log('environment', process.versions);
             const fs = require('fs').promises;
             const { repo: { owner, repo }, sha } = context;
-            
+
             for (let file of await fs.readdir('src/out')) {
               console.log('uploading', file);
-              
+
               await github.rest.repos.uploadReleaseAsset({
                 owner,
                 repo,
