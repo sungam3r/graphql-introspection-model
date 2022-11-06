@@ -45,7 +45,7 @@ jobs:
         if: ${{ startsWith(matrix.os, 'ubuntu') }}
         working-directory: src
         run: |
-          dotnet-format --no-restore --verify-no-changes --severity warn -v diag || (echo "Run 'dotnet format' to fix issues" && exit 1)
+          dotnet format --no-restore --verify-no-changes --severity warn -v diag || (echo "Run 'dotnet format' to fix issues" && exit 1)
       - name: Build solution [Release]
         working-directory: src
         run: dotnet build --no-restore -c Release
