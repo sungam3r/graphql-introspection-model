@@ -18,7 +18,7 @@ public class SDLBuilder
         Double = 2,
     }
 
-    private static readonly List<string> _builtInScalars = new List<string>
+    private static readonly List<string> _builtInScalars = new()
     {
         "String",
         "Boolean",
@@ -27,7 +27,7 @@ public class SDLBuilder
         "ID"
     };
     private static readonly char[] _escapedCharacters = new char[] { '"', '\\', '\b', '\f', '\n', '\r', '\t' };
-    private readonly StringBuilder _buffer = new StringBuilder();
+    private readonly StringBuilder _buffer = new();
     private readonly GraphQLSchema _schema;
     private readonly SDLBuilderOptions _options;
 
@@ -103,43 +103,25 @@ public class SDLBuilder
 
         Indent GetElementIndent()
         {
-            switch (element)
+            return element switch
             {
-                case GraphQLDirective _:
-                case GraphQLType _:
-                    return Indent.None;
-
-                case GraphQLArgument _:
-                    return parent is GraphQLDirective ? Indent.Single : Indent.Double;
-
-                default:
-                    return Indent.Single;
-            }
+                GraphQLDirective _ or GraphQLType _ => Indent.None,
+                GraphQLArgument _ => parent is GraphQLDirective ? Indent.Single : Indent.Double,
+                _ => Indent.Single,
+            };
         }
 
         bool IsDescriptionAllowed()
         {
-            switch (element)
+            return element switch
             {
-                case GraphQLType _:
-                    return _options.TypeComments;
-
-                case GraphQLEnumValue _:
-                    return _options.EnumValuesComments;
-
-                case GraphQLField _:
-                case GraphQLInputField _:
-                    return _options.FieldComments;
-
-                case GraphQLArgument _:
-                    return parent is GraphQLDirective ? _options.DirectiveComments : _options.ArgumentComments;
-
-                case GraphQLDirective _:
-                    return _options.DirectiveComments;
-
-                default:
-                    throw new NotSupportedException($"Unknown element '{element.GetType().Name}'");
-            }
+                GraphQLType _ => _options.TypeComments,
+                GraphQLEnumValue _ => _options.EnumValuesComments,
+                GraphQLField _ or GraphQLInputField _ => _options.FieldComments,
+                GraphQLArgument _ => parent is GraphQLDirective ? _options.DirectiveComments : _options.ArgumentComments,
+                GraphQLDirective _ => _options.DirectiveComments,
+                _ => throw new NotSupportedException($"Unknown element '{element.GetType().Name}'"),
+            };
         }
     }
 
@@ -397,10 +379,9 @@ public class SDLBuilder
             // https://graphql.github.io/graphql-spec/June2018/#sec--deprecated
             if (deprecatable.IsDeprecated)
             {
-                if (deprecatable.DeprecationReason != null)
-                    return $" @deprecated(reason: \"{EscapeString(deprecatable.DeprecationReason)}\")";
-                else
-                    return " @deprecated";
+                return deprecatable.DeprecationReason == null
+                    ? " @deprecated"
+                    : $" @deprecated(reason: \"{EscapeString(deprecatable.DeprecationReason)}\")";
             }
 
             return string.Empty;
@@ -410,19 +391,11 @@ public class SDLBuilder
             return string.Empty;
         }
 
-        string Arguments(GraphQLAppliedDirective applied)
+        static string Arguments(GraphQLAppliedDirective applied)
         {
-            if (applied.Args == null || applied.Args.Count == 0)
-                return string.Empty;
-
-            return $"({string.Join(", ", applied.Args.Select(a => $"{a.Name}: {ToLiteral(applied, a)}"))})";
-        }
-
-        string ToLiteral(GraphQLAppliedDirective applied, GraphQLDirectiveArgument argument)
-        {
-            var directive = _schema.Directives.First(d => d.Name == applied.Name);
-            var arg = directive.Args.First(a => a.Name == argument.Name);
-            return argument.Value ?? "null";
+            return applied.Args == null || applied.Args.Count == 0
+                ? string.Empty
+                : $"({string.Join(", ", applied.Args.Select(a => $"{a.Name}: {a.Value ?? "null"}"))})";
         }
     }
 }
