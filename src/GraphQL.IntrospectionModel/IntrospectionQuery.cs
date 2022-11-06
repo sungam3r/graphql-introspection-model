@@ -1,10 +1,10 @@
-namespace GraphQL.IntrospectionModel
+namespace GraphQL.IntrospectionModel;
+
+/// <summary> Query text for introspection request. See https://graphql.github.io/graphql-spec/June2018/#sec-Introspection </summary>
+public static class IntrospectionQuery
 {
-    /// <summary> Query text for introspection request. See https://graphql.github.io/graphql-spec/June2018/#sec-Introspection </summary>
-    public static class IntrospectionQuery
-    {
-        /// <summary> The text of the "classic" introspection request - without exposing directives. </summary>
-        public static readonly string Classic = @"
+    /// <summary> The text of the "classic" introspection request - without exposing directives. </summary>
+    public static readonly string Classic = @"
   query IntrospectionQuery {
     __schema {
       description
@@ -99,8 +99,8 @@ namespace GraphQL.IntrospectionModel
   }
 ";
 
-        /// <summary> The text of the modified introspection request, in which the directives applied to the schema elements are exposed. </summary>
-        public static readonly string Modern = @"
+    /// <summary> The text of the modified introspection request, in which the directives applied to the schema elements are exposed. </summary>
+    public static readonly string Modern = @"
   query IntrospectionQuery {
     __schema {
       description
@@ -206,5 +206,4 @@ namespace GraphQL.IntrospectionModel
     }
   }
 ";
-    }
 }
