@@ -4,23 +4,23 @@
 
 ![License](https://img.shields.io/github/license/sungam3r/graphql-introspection-model)
 
-[![Run unit tests](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/test.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/test.yml)
-[![Publish preview to GitHub registry](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-preview.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-preview.yml)
-[![Publish release to Nuget registry](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-release.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-release.yml)
-[![CodeQL analysis](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/codeql-analysis.yml)
-
 [![codecov](https://codecov.io/gh/sungam3r/graphql-introspection-model/branch/master/graph/badge.svg?token=I98DQMW5EJ)](https://codecov.io/gh/sungam3r/graphql-introspection-model)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/sungam3r/graphql-introspection-model.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sungam3r/graphql-introspection-model/alerts/)
-[![Language grade: C#](https://img.shields.io/lgtm/grade/csharp/g/sungam3r/graphql-introspection-model.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sungam3r/graphql-introspection-model/context:csharp)
-
-[![NuGet](https://img.shields.io/nuget/v/GraphQL.IntrospectionModel)](https://www.nuget.org/packages/GraphQL.IntrospectionModel)
 [![Nuget](https://img.shields.io/nuget/dt/GraphQL.IntrospectionModel)](https://www.nuget.org/packages/GraphQL.IntrospectionModel)
+[![NuGet](https://img.shields.io/nuget/v/GraphQL.IntrospectionModel)](https://www.nuget.org/packages/GraphQL.IntrospectionModel)
 
+[![GitHub Release Date](https://img.shields.io/github/release-date/sungam3r/graphql-introspection-model?label=released)](https://github.com/sungam3r/graphql-introspection-model/releases)
+[![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/sungam3r/graphql-introspection-model/latest?label=new+commits)](https://github.com/sungam3r/graphql-introspection-model/commits/master)
+![Size](https://img.shields.io/github/repo-size/sungam3r/graphql-introspection-model)
+
+[![GitHub contributors](https://img.shields.io/github/contributors/sungam3r/graphql-introspection-model)](https://github.com/sungam3r/graphql-introspection-model/graphs/contributors)
 ![Activity](https://img.shields.io/github/commit-activity/w/sungam3r/graphql-introspection-model)
 ![Activity](https://img.shields.io/github/commit-activity/m/sungam3r/graphql-introspection-model)
 ![Activity](https://img.shields.io/github/commit-activity/y/sungam3r/graphql-introspection-model)
 
-![Size](https://img.shields.io/github/repo-size/sungam3r/graphql-introspection-model)
+[![Run unit tests](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/test.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/test.yml)
+[![Publish preview to GitHub registry](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-preview.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-preview.yml)
+[![Publish release to Nuget registry](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-release.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-release.yml)
+[![CodeQL analysis](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/codeql-analysis.yml)
 
 Types for GraphQL [introspection](https://graphql.github.io/graphql-spec/June2018/#sec-Introspection) model. Used by [graphql-sdl-exporter](https://github.com/sungam3r/graphql-sdl-exporter).
 
