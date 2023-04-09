@@ -1,0 +1,10 @@
+enum Color {
+  RED
+  GREEN @deprecated(reason: "Use RED")
+  BLUE @some
+}
+
+enum Status @v2 {
+  Ok
+  Error
+}
