@@ -234,7 +234,7 @@ public class SDLBuilderTests
     }
 
     [Fact]
-    public void Should_Build_Schema_With_Directives_Only()
+    public void Should_Build_Directives()
     {
         var schema = new GraphQLSchema
         {
@@ -301,7 +301,74 @@ public class SDLBuilderTests
 
         string sdl = SDLBuilder.Build(schema, new SDLBuilderOptions { DirectiveComparer = null });
 
-        sdl.ShouldBe(ReadFile("directives_only.graphql"));
+        sdl.ShouldBe(ReadFile("directives.graphql"));
+    }
+
+    [Fact]
+    public void Should_Build_Enums()
+    {
+        var schema = new GraphQLSchema
+        {
+            Types = new List<GraphQLType>
+            {
+                new GraphQLType
+                {
+                    Kind = GraphQLTypeKind.Enum,
+                    Name = "Color",
+                    EnumValues = new List<GraphQLEnumValue>
+                    {
+                        new GraphQLEnumValue
+                        {
+                            Name = "RED"
+                        },
+                        new GraphQLEnumValue
+                        {
+                            Name = "GREEN",
+                            IsDeprecated = true,
+                            DeprecationReason = "Use RED"
+                        },
+                        new GraphQLEnumValue
+                        {
+                            Name = "BLUE",
+                            AppliedDirectives = new List<GraphQLAppliedDirective>
+                            {
+                                new GraphQLAppliedDirective
+                                {
+                                    Name = "some"
+                                }
+                            }
+                        }
+                    }
+                },
+                new GraphQLType
+                {
+                    Kind = GraphQLTypeKind.Enum,
+                    Name = "Status",
+                    EnumValues = new List<GraphQLEnumValue>
+                    {
+                        new GraphQLEnumValue
+                        {
+                            Name = "Ok"
+                        },
+                        new GraphQLEnumValue
+                        {
+                            Name = "Error",
+                        }
+                    },
+                    AppliedDirectives = new List<GraphQLAppliedDirective>
+                    {
+                        new GraphQLAppliedDirective
+                        {
+                            Name = "v2"
+                        }
+                    }
+                }
+            }
+        };
+
+        string sdl = SDLBuilder.Build(schema);
+
+        sdl.ShouldBe(ReadFile("enums.graphql"));
     }
 
     private static string ReadFile(string fileName)
