@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="*.graphql;*.json">
+    <None Include="Files/*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

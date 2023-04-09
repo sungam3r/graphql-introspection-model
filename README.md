@@ -22,7 +22,7 @@
 [![Publish release to Nuget registry](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-release.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/publish-release.yml)
 [![CodeQL analysis](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sungam3r/graphql-introspection-model/actions/workflows/codeql-analysis.yml)
 
-Types for GraphQL [introspection](https://graphql.github.io/graphql-spec/June2018/#sec-Introspection) model. Used by [graphql-sdl-exporter](https://github.com/sungam3r/graphql-sdl-exporter).
+Types for GraphQL [introspection](https://graphql.github.io/graphql-spec/October2021/#sec-Introspection) model. Used by [graphql-sdl-exporter](https://github.com/sungam3r/graphql-sdl-exporter).
 
 A GraphQL server supports introspection over its schema. This schema is queried using GraphQL itself, creating a powerful
 platform for tool‐building.
@@ -127,7 +127,7 @@ Such data structures are provided by this repository. The top level type is [`Gr
 After deserialization JSON into the `GraphQLSchema` (or after creating `GraphQLSchema` in any other way), it can be printed as SDL document
 using [`SDLBuilder`](src/GraphQL.IntrospectionModel/SDL/SDLBuilder.cs):
 
-```c#
+```csharp
 GraphQLSchema schema = ...;
 
 // default
@@ -139,11 +139,11 @@ var sdl = SDLBuilder.Build(schema, new SDLBuilderOptions { IndentSize = 4, Argum
 File.WriteAllText("MySchema.graphql", sdl);
 ```
 
-GraphQL has its own language to write GraphQL schemas, [SDL](https://graphql.github.io/graphql-spec/June2018/#sec-Type-System) - Schema Definition Language.
+GraphQL has its own language to write GraphQL schemas, [SDL](https://graphql.github.io/graphql-spec/October2021/#sec-Type-System) - Schema Definition Language.
 SDL is simple and intuitive to use while being extremely powerful and expressive. Some examples of SDL documents can be found in [graphql-sdl-exporter](https://github.com/sungam3r/graphql-sdl-exporter/tree/master/samples) project.
 
 Many types in this project implement the [`IHasDirectives`](src/GraphQL.IntrospectionModel/IHasDirectives.cs) interface. It serves to obtain information
-about the directives applied to the element. The [official specification](https://graphql.github.io/graphql-spec/June2018/#) does not describe such a possibility,
+about the directives applied to the element. The [official specification](https://graphql.github.io/graphql-spec/October2021) does not describe such a possibility,
 although [discussions](https://github.com/graphql/graphql-spec/issues/300) are underway to expand the specification to add this feature.
 [graphql-sdl-exporter](https://github.com/sungam3r/graphql-sdl-exporter/tree/master/samples) can get information about directives if the server
 [supports](https://github.com/sungam3r/graphql-introspection-model/blob/master/src/GraphQL.IntrospectionModel/IntrospectionQuery.cs#L102) this feature.

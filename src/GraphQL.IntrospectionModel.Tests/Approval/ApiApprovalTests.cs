@@ -5,7 +5,6 @@ using Xunit;
 namespace GraphQL.IntrospectionModel.Tests.Approval;
 
 /// <summary> Tests for checking changes to the public API. </summary>
-/// <see href="https://github.com/JakeGinnivan/ApiApprover"/>
 public class ApiApprovalTests
 {
     /// <summary> Check for changes to the public APIs. </summary>
@@ -14,7 +13,7 @@ public class ApiApprovalTests
     [InlineData(typeof(GraphQLField))]
     public void PublicApi(Type type)
     {
-        string publicApi = type.Assembly.GeneratePublicApi(new ApiGeneratorOptions
+        string publicApi = type.Assembly.GeneratePublicApi(new()
         {
             IncludeAssemblyAttributes = false,
             AllowNamespacePrefixes = new[] { "Microsoft.Extensions.DependencyInjection" },

@@ -13,11 +13,11 @@ public class SDLBuilderTests
     [Fact]
     public void Should_Build_Schema_From_Introspection()
     {
-        string introspection = Read("test1.json");
+        string introspection = ReadFile("test1.json");
         var schemaJson = JObject.Parse(introspection).Property("__schema")!.Value;
         var schema = schemaJson.ToObject<GraphQLSchema>();
         string sdl = SDLBuilder.Build(schema!);
-        sdl.ShouldBe(Read("test1.graphql"));
+        sdl.ShouldBe(ReadFile("test1.graphql"));
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ public class SDLBuilderTests
 
         string sdl = SDLBuilder.Build(schema);
 
-        sdl.ShouldBe(Read("person.graphql"));
+        sdl.ShouldBe(ReadFile("person.graphql"));
     }
 
     [Fact]
@@ -121,9 +121,141 @@ public class SDLBuilderTests
 
         string sdl = SDLBuilder.Build(schema);
 
-        sdl.ShouldBe(Read("interfaces.graphql"));
+        sdl.ShouldBe(ReadFile("interfaces.graphql"));
     }
 
-    private static string Read(string fileName)
-        => File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName));
+    // https://github.com/graphql/graphql-spec/pull/805
+    [Fact]
+    public void Should_Build_Schema_With_New_Deprecations_From_Draft_Spec()
+    {
+        var schema = new GraphQLSchema
+        {
+            Types = new List<GraphQLType>
+            {
+                new GraphQLType
+                {
+                    Name = "Query",
+                    Kind = GraphQLTypeKind.Object,
+                    Fields = new List<GraphQLField>
+                    {
+                        new GraphQLField
+                        {
+                            Name = "persons",
+                            Type = new GraphQLFieldType
+                            {
+                                Kind = GraphQLTypeKind.List,
+                                OfType = new GraphQLFieldType
+                                {
+                                    Name = "Person"
+                                }
+                            },
+                            Args = new List<GraphQLArgument>
+                            {
+                                new GraphQLArgument
+                                {
+                                    Name = "filter",
+                                    Type = new GraphQLFieldType
+                                    {
+                                        Name = "PersonFilter",
+                                    },
+                                    AppliedDirectives = new List<GraphQLAppliedDirective>
+                                    {
+                                        new GraphQLAppliedDirective
+                                        {
+                                            Name = "deprecated",
+                                            Args = new List<GraphQLDirectiveArgument>
+                                            {
+                                                new GraphQLDirectiveArgument
+                                                {
+                                                    Name = "reason",
+                                                    Value = "\"Do not use this arg\""
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                new GraphQLType
+                {
+                    Name = "PersonFilter",
+                    Kind = GraphQLTypeKind.Input_Object,
+                    InputFields = new List<GraphQLInputField>
+                    {
+                        new GraphQLInputField
+                        {
+                            Name = "namePattern",
+                            Type = new GraphQLFieldType
+                            {
+                                Name = "String"
+                            },
+                            AppliedDirectives = new List<GraphQLAppliedDirective>
+                            {
+                                new GraphQLAppliedDirective
+                                {
+                                    Name = "deprecated",
+                                    Args = new List<GraphQLDirectiveArgument>
+                                    {
+                                        new GraphQLDirectiveArgument
+                                        {
+                                            Name = "reason",
+                                            Value = "\"Do not use this field\""
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                new GraphQLType
+                {
+                    Name = "Person",
+                    Kind = GraphQLTypeKind.Object,
+                    Fields = new List<GraphQLField>
+                    {
+                        new GraphQLField
+                        {
+                            Name = "name",
+                            Type = new GraphQLFieldType
+                            {
+                                Name = "String"
+                            }
+                        }
+                    }
+                },
+            }
+        };
+
+        string sdl = SDLBuilder.Build(schema);
+
+        sdl.ShouldBe(ReadFile("deprecations.graphql"));
+    }
+
+    [Fact]
+    public void Should_Build_Schema_With_Directives_Only()
+    {
+        var schema = new GraphQLSchema
+        {
+            Directives = new List<GraphQLDirective>
+            {
+                new GraphQLDirective
+                {
+                    Name = "my",
+                    Locations = new List<GraphQLDirectiveLocation>
+                    {
+                        GraphQLDirectiveLocation.Query
+                    }
+                }
+            }
+        };
+
+        string sdl = SDLBuilder.Build(schema);
+
+        sdl.ShouldBe(ReadFile("directives_only.graphql"));
+    }
+
+    private static string ReadFile(string fileName)
+        => File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Files", fileName));
 }
