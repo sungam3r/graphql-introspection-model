@@ -1,2 +1,11 @@
 directive @my on
   | QUERY
+
+directive @your repeatable on
+  | ENUM
+
+directive @my_with_args(if: Boolean) on
+  | QUERY
+
+directive @your_with_args(if: Boolean) repeatable on
+  | ENUM

@@ -34,4 +34,18 @@ public sealed class SDLBuilderOptions
 
     /// <summary> Gets or sets the size of the indentation in spaces in the generated SDL. </summary>
     public int IndentSize { get; set; } = 2;
+
+    /// <summary>
+    /// Comparer to sort directives in the generated SDL.
+    /// If not set directives are not sorted at all.
+    /// By default directives are sorted in alphabet order.
+    /// </summary>
+    public IComparer<GraphQLDirective>? DirectiveComparer { get; set; } = Comparer<GraphQLDirective>.Create((a, b) => string.Compare(a.Name, b.Name, ignoreCase: true));
+
+    /// <summary>
+    /// Comparer to sort types in the generated SDL.
+    /// If not set types are not sorted at all.
+    /// By default types are sorted in alphabet order.
+    /// </summary>
+    public IComparer<GraphQLType>? TypeComparer { get; set; } = Comparer<GraphQLType>.Create((a, b) => string.Compare(a.Name, b.Name, ignoreCase: true));
 }
