@@ -6,10 +6,12 @@ namespace GraphQL.IntrospectionModel
         public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLDirectiveArgument>? Args { get; set; }
         public string Name { get; set; }
     }
-    public sealed class GraphQLArgument : GraphQL.IntrospectionModel.GraphQLNamedObject
+    public sealed class GraphQLArgument : GraphQL.IntrospectionModel.GraphQLNamedObject, GraphQL.IntrospectionModel.IDeprecatable
     {
         public GraphQLArgument() { }
         public string? DefaultValue { get; set; }
+        public string? DeprecationReason { get; set; }
+        public bool IsDeprecated { get; set; }
         public GraphQL.IntrospectionModel.GraphQLFieldType Type { get; set; }
     }
     public sealed class GraphQLDirective : GraphQL.IntrospectionModel.GraphQLNamedObject
@@ -67,10 +69,12 @@ namespace GraphQL.IntrospectionModel
         public GraphQL.IntrospectionModel.GraphQLFieldType? OfType { get; set; }
         public string SDLType { get; }
     }
-    public sealed class GraphQLInputField : GraphQL.IntrospectionModel.GraphQLNamedObject
+    public sealed class GraphQLInputField : GraphQL.IntrospectionModel.GraphQLNamedObject, GraphQL.IntrospectionModel.IDeprecatable
     {
         public GraphQLInputField() { }
         public string? DefaultValue { get; set; }
+        public string? DeprecationReason { get; set; }
+        public bool IsDeprecated { get; set; }
         public GraphQL.IntrospectionModel.GraphQLFieldType Type { get; set; }
     }
     public abstract class GraphQLNamedObject : GraphQL.IntrospectionModel.IHasDescription, GraphQL.IntrospectionModel.IHasDirectives
@@ -141,7 +145,9 @@ namespace GraphQL.IntrospectionModel
     public static class IntrospectionQuery
     {
         public static readonly string Classic;
+        public static readonly string ClassicDraft;
         public static readonly string Modern;
+        public static readonly string ModernDraft;
     }
 }
 namespace GraphQL.IntrospectionModel.SDL

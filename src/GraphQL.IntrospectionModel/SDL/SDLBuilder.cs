@@ -30,6 +30,7 @@ public class SDLBuilder
     private readonly StringBuilder _buffer = new();
     private readonly GraphQLSchema _schema;
     private readonly SDLBuilderOptions _options;
+    private bool _appendNewLine;
 
     private SDLBuilder(GraphQLSchema schema, SDLBuilderOptions options)
     {
@@ -37,7 +38,15 @@ public class SDLBuilder
         _options = options;
     }
 
-    // https://graphql.github.io/graphql-spec/June2018/#sec-String-Value
+    private void HandleNewLine()
+    {
+        if (_appendNewLine)
+            WriteLine();
+        else
+            _appendNewLine = true;
+    }
+
+    // https://graphql.github.io/graphql-spec/October2021/#sec-String-Value
     private static string EscapeString(string source)
     {
         if (source.IndexOfAny(_escapedCharacters) == -1)
@@ -140,6 +149,92 @@ public class SDLBuilder
     {
         WriteDirectives();
         WriteSchema();
+        WriteTypes();
+
+        return _buffer.ToString();
+    }
+
+    private void WriteDirectives()
+    {
+        if (_schema.Directives == null || _schema.Directives.Count == 0)
+            return;
+
+        foreach (var directive in _schema.Directives.OrderBy(d => d.Name, StringComparer.Ordinal))
+        {
+            if (IsStandardDirective(directive))
+                continue;
+
+            HandleNewLine();
+
+            WriteDescription(directive);
+
+            if (directive.Args == null || directive.Args.Count == 0)
+            {
+                if (directive.IsRepeatable)
+                    WriteLine($"directive @{directive.Name} repeatable on");
+                else
+                    WriteLine($"directive @{directive.Name} on");
+            }
+            else
+            {
+                if (directive.Args.All(a => a.Description == null && (a.AppliedDirectives?.Count ?? 0) == 0))
+                {
+                    // if no directive argument has descriptions and directives, then write the entire signature of the directive in one line
+                    WriteLine($"directive @{directive.Name}(" + string.Join(", ", directive.Args.Select(arg => $"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.DefaultValue)}")) + ") " + (directive.IsRepeatable ? "repeatable on" : "on"));
+                }
+                else
+                {
+                    // otherwise write each argument on a separate line
+                    WriteLine($"directive @{directive.Name}(");
+
+                    foreach (var arg in directive.Args)
+                    {
+                        WriteDescription(arg, directive);
+                        WriteLine($"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.DefaultValue)}{Directives(arg)}", indent: Indent.Single);
+                    }
+
+                    if (directive.IsRepeatable)
+                        WriteLine(") repeatable on");
+                    else
+                        WriteLine(") on");
+                }
+            }
+
+            if (directive.Locations?.Count > 0)
+            {
+                foreach (var location in directive.Locations)
+                    WriteLine($"| {location.ToString().ToUpperInvariant()}", Indent.Single);
+            }
+        }
+
+        // https://github.com/graphql/graphql-spec/issues/632
+        static bool IsStandardDirective(GraphQLDirective directive) => directive.Name == "skip" || directive.Name == "include" || directive.Name == "deprecated";
+    }
+
+    private void WriteSchema()
+    {
+        // skip printing empty schema { }
+        if ((_schema.AppliedDirectives == null || !_options.Directives) && _schema.QueryType == null && _schema.MutationType == null && _schema.SubscriptionType == null)
+            return;
+
+        HandleNewLine();
+
+        WriteLine($"schema{Directives(_schema)} {{");
+
+        if (_schema.QueryType != null)
+            WriteLine($"query: {_schema.QueryType.Name}", indent: Indent.Single); // generally speaking, query should always be according to the specification
+        if (_schema.MutationType != null)
+            WriteLine($"mutation: {_schema.MutationType.Name}", indent: Indent.Single);
+        if (_schema.SubscriptionType != null)
+            WriteLine($"subscription: {_schema.SubscriptionType.Name}", indent: Indent.Single);
+
+        WriteLine("}");
+    }
+
+    private void WriteTypes()
+    {
+        if (_schema.Types == null || _schema.Types.Count == 0)
+            return;
 
         var typesToBuild = _schema.Types.Where(t => !t.IsIntrospection).OrderBy(t => t.Name, StringComparer.Ordinal).ToArray();
         for (int i = 0; i < typesToBuild.Length; ++i)
@@ -176,83 +271,13 @@ public class SDLBuilder
                     throw new NotSupportedException(type.Kind.ToString());
             }
         }
-
-        return _buffer.ToString();
-    }
-
-    private void WriteDirectives()
-    {
-        if (_schema.Directives == null)
-            return;
-
-        foreach (var directive in _schema.Directives.OrderBy(d => d.Name, StringComparer.Ordinal))
-        {
-            if (IsStandardDirective(directive))
-                continue;
-
-            WriteDescription(directive);
-
-            if (directive.Args == null || directive.Args.Count == 0)
-            {
-                if (directive.IsRepeatable)
-                    WriteLine($"directive @{directive.Name} repeatable on");
-                else
-                    WriteLine($"directive @{directive.Name} on");
-            }
-            else
-            {
-                if (directive.Args.All(a => a.Description == null && (a.AppliedDirectives?.Count ?? 0) == 0))
-                {
-                    // if no directive argument has descriptions and directives, then write the entire signature of the directive in one line
-                    WriteLine($"directive @{directive.Name}(" + string.Join(", ", directive.Args.Select(arg => $"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.DefaultValue)}")) + ") " + (directive.IsRepeatable ? "repeatable on" : "on"));
-                }
-                else
-                {
-                    // otherwise write each argument on a separate line
-                    WriteLine($"directive @{directive.Name}(");
-
-                    foreach (var arg in directive.Args)
-                    {
-                        WriteDescription(arg, directive);
-                        WriteLine($"{arg.Name}: {arg.Type.SDLType}{PrintDefault(arg.DefaultValue)}{Directives(arg)}", indent: Indent.Single);
-                    }
-
-                    if (directive.IsRepeatable)
-                        WriteLine(") repeatable on");
-                    else
-                        WriteLine(") on");
-                }
-            }
-
-            foreach (var location in directive.Locations)
-                WriteLine($"| {location.ToString().ToUpperInvariant()}", Indent.Single);
-
-            WriteLine();
-        }
-
-        // https://github.com/graphql/graphql-spec/issues/632
-        static bool IsStandardDirective(GraphQLDirective directive) => directive.Name == "skip" || directive.Name == "include" || directive.Name == "deprecated";
-    }
-
-    private void WriteSchema()
-    {
-        WriteLine($"schema{Directives(_schema)} {{");
-
-        if (_schema.QueryType != null)
-            WriteLine($"query: {_schema.QueryType.Name}", indent: Indent.Single); // generally speaking, query should always be according to the specification
-        if (_schema.MutationType != null)
-            WriteLine($"mutation: {_schema.MutationType.Name}", indent: Indent.Single);
-        if (_schema.SubscriptionType != null)
-            WriteLine($"subscription: {_schema.SubscriptionType.Name}", indent: Indent.Single);
-
-        WriteLine("}");
     }
 
     private void WriteScalar(GraphQLType type)
     {
         if (!_options.OmitBuiltInScalars || !_builtInScalars.Contains(type.Name))
         {
-            WriteLine();
+            HandleNewLine();
             WriteDescription(type);
             WriteLine($"scalar {type.Name}{Directives(type)}");
         }
@@ -260,7 +285,7 @@ public class SDLBuilder
 
     private void WriteEnum(GraphQLType type)
     {
-        WriteLine();
+        HandleNewLine();
         WriteDescription(type);
         WriteLine($"enum {type.Name}{Directives(type)} {{");
 
@@ -275,14 +300,17 @@ public class SDLBuilder
 
     private void WriteInput(GraphQLType type)
     {
-        WriteLine();
+        HandleNewLine();
         WriteDescription(type);
         WriteLine($"input {type.Name}{Directives(type)} {{");
 
-        foreach (var field in type.InputFields)
+        if (type.InputFields != null)
         {
-            WriteDescription(field);
-            WriteLine($"{field.Name}: {field.Type.SDLType}{PrintDefault(field.DefaultValue)}{Directives(field)}", indent: Indent.Single);
+            foreach (var field in type.InputFields)
+            {
+                WriteDescription(field);
+                WriteLine($"{field.Name}: {field.Type.SDLType}{PrintDefault(field.DefaultValue)}{Directives(field)}", indent: Indent.Single);
+            }
         }
 
         WriteLine("}");
@@ -290,7 +318,7 @@ public class SDLBuilder
 
     private void WriteInterface(GraphQLType type)
     {
-        WriteLine();
+        HandleNewLine();
         WriteDescription(type);
         WriteLine($"interface {type.Name}{Directives(type)} {{");
         WriteObjectOrInterfaceBody(type);
@@ -299,7 +327,7 @@ public class SDLBuilder
 
     private void WriteObject(GraphQLType type)
     {
-        WriteLine();
+        HandleNewLine();
         WriteDescription(type);
         WriteLine($"type {type.Name}{Implements(type)}{Directives(type)} {{");
         WriteObjectOrInterfaceBody(type);
@@ -308,7 +336,7 @@ public class SDLBuilder
 
     private void WriteUnion(GraphQLType type)
     {
-        WriteLine();
+        HandleNewLine();
         WriteDescription(type);
         WriteLine($"union {type.Name} = {string.Join(" | ", type.PossibleTypes.Select(t => t.Name))}{Directives(type)}");
     }
@@ -376,7 +404,7 @@ public class SDLBuilder
         // Else fall back to print only @deprecated
         else if (element is IDeprecatable deprecatable)
         {
-            // https://graphql.github.io/graphql-spec/June2018/#sec--deprecated
+            // https://graphql.github.io/graphql-spec/October2021/#sec--deprecated
             if (deprecatable.IsDeprecated)
             {
                 return deprecatable.DeprecationReason == null
