@@ -162,11 +162,13 @@ namespace GraphQL.IntrospectionModel.SDL
         public SDLBuilderOptions() { }
         public bool ArgumentComments { get; set; }
         public bool DirectiveComments { get; set; }
+        public System.Collections.Generic.IComparer<GraphQL.IntrospectionModel.GraphQLDirective>? DirectiveComparer { get; set; }
         public bool Directives { get; set; }
         public bool EnumValuesComments { get; set; }
         public bool FieldComments { get; set; }
         public int IndentSize { get; set; }
         public bool OmitBuiltInScalars { get; set; }
         public bool TypeComments { get; set; }
+        public System.Collections.Generic.IComparer<GraphQL.IntrospectionModel.GraphQLType>? TypeComparer { get; set; }
     }
 }

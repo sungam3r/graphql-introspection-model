@@ -156,10 +156,20 @@ public class SDLBuilder
 
     private void WriteDirectives()
     {
+        ICollection<GraphQLDirective> SortedDirectives()
+        {
+            if (_options.DirectiveComparer == null)
+                return _schema.Directives!;
+
+            var copy = _schema.Directives.ToList();
+            copy.Sort(_options.DirectiveComparer);
+            return copy;
+        }
+
         if (_schema.Directives == null || _schema.Directives.Count == 0)
             return;
 
-        foreach (var directive in _schema.Directives.OrderBy(d => d.Name, StringComparer.Ordinal))
+        foreach (var directive in SortedDirectives())
         {
             if (IsStandardDirective(directive))
                 continue;
@@ -233,11 +243,21 @@ public class SDLBuilder
 
     private void WriteTypes()
     {
+        List<GraphQLType> SortedTypes()
+        {
+            var filtered = _schema.Types.Where(t => !t.IsIntrospection).ToList();
+
+            if (_options.TypeComparer != null)
+                filtered.Sort(_options.TypeComparer);
+
+            return filtered;
+        }
+
         if (_schema.Types == null || _schema.Types.Count == 0)
             return;
 
-        var typesToBuild = _schema.Types.Where(t => !t.IsIntrospection).OrderBy(t => t.Name, StringComparer.Ordinal).ToArray();
-        for (int i = 0; i < typesToBuild.Length; ++i)
+        var typesToBuild = SortedTypes();
+        for (int i = 0; i < typesToBuild.Count; ++i)
         {
             var type = typesToBuild[i];
 

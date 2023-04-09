@@ -247,11 +247,59 @@ public class SDLBuilderTests
                     {
                         GraphQLDirectiveLocation.Query
                     }
+                },
+                new GraphQLDirective
+                {
+                    Name = "your",
+                    IsRepeatable = true,
+                    Locations = new List<GraphQLDirectiveLocation>
+                    {
+                        GraphQLDirectiveLocation.Enum
+                    }
+                },
+                new GraphQLDirective
+                {
+                    Name = "my_with_args",
+                    Locations = new List<GraphQLDirectiveLocation>
+                    {
+                        GraphQLDirectiveLocation.Query
+                    },
+                    Args = new List<GraphQLArgument>
+                    {
+                        new GraphQLArgument
+                        {
+                            Name = "if",
+                            Type = new GraphQLFieldType
+                            {
+                                Name = "Boolean"
+                            }
+                        }
+                    }
+                },
+                new GraphQLDirective
+                {
+                    Name = "your_with_args",
+                    IsRepeatable = true,
+                    Locations = new List<GraphQLDirectiveLocation>
+                    {
+                        GraphQLDirectiveLocation.Enum
+                    },
+                    Args = new List<GraphQLArgument>
+                    {
+                        new GraphQLArgument
+                        {
+                            Name = "if",
+                            Type = new GraphQLFieldType
+                            {
+                                Name = "Boolean"
+                            }
+                        }
+                    }
                 }
             }
         };
 
-        string sdl = SDLBuilder.Build(schema);
+        string sdl = SDLBuilder.Build(schema, new SDLBuilderOptions { DirectiveComparer = null });
 
         sdl.ShouldBe(ReadFile("directives_only.graphql"));
     }
