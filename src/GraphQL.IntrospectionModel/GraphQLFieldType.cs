@@ -12,8 +12,8 @@ public sealed class GraphQLFieldType : GraphQLTypeDescriptor
     /// <summary> Gets the SDL type of the field. </summary>
     public string SDLType => Kind switch
     {
-        GraphQLTypeKind.List => $"[{OfType!.SDLType}]",
-        GraphQLTypeKind.Non_Null => OfType!.SDLType + "!",
+        GraphQLTypeKind.LIST => $"[{OfType!.SDLType}]",
+        GraphQLTypeKind.NON_NULL => OfType!.SDLType + "!",
         _ => Name
     };
 }

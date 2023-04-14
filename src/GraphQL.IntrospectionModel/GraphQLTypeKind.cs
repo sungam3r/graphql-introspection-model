@@ -4,26 +4,26 @@ namespace GraphQL.IntrospectionModel;
 public enum GraphQLTypeKind
 {
     /// <summary> An object, that is, a composite output type. </summary>
-    Object,
+    OBJECT,
 
     /// <summary> Interface. </summary>
-    Interface,
+    INTERFACE,
 
     /// <summary> Scalar type. </summary>
-    Scalar,
+    SCALAR,
 
     /// <summary> Enumeration type. </summary>
-    Enum,
+    ENUM,
 
     /// <summary> A composite input type. </summary>
-    Input_Object,
+    INPUT_OBJECT,
 
     /// <summary> List of items, type modifier. </summary>
-    List,
+    LIST,
 
     /// <summary> A type modifier that prevents the type from being null. </summary>
-    Non_Null,
+    NON_NULL,
 
     /// <summary> Union of several types. </summary>
-    Union,
+    UNION,
 }

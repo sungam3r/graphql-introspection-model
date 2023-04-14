@@ -44,10 +44,10 @@ public class SDLBuilderTests
                             Name = "Age",
                             Type = new GraphQLFieldType
                             {
-                                Kind = GraphQLTypeKind.Non_Null,
+                                Kind = GraphQLTypeKind.NON_NULL,
                                 OfType = new GraphQLFieldType
                                 {
-                                    Kind = GraphQLTypeKind.Scalar,
+                                    Kind = GraphQLTypeKind.SCALAR,
                                     Name = "Int"
                                 }
                             }
@@ -57,7 +57,7 @@ public class SDLBuilderTests
                             Name = "Name",
                             Type = new GraphQLFieldType
                             {
-                                Kind = GraphQLTypeKind.Scalar,
+                                Kind = GraphQLTypeKind.SCALAR,
                                 Name = "String"
                             }
                         }
@@ -85,17 +85,17 @@ public class SDLBuilderTests
                 new GraphQLType
                 {
                     Name = "IPerson1",
-                    Kind = GraphQLTypeKind.Interface
+                    Kind = GraphQLTypeKind.INTERFACE
                 },
                 new GraphQLType
                 {
                     Name = "IPerson2",
-                    Kind = GraphQLTypeKind.Interface
+                    Kind = GraphQLTypeKind.INTERFACE
                 },
                 new GraphQLType
                 {
                     Name = "IPerson3",
-                    Kind = GraphQLTypeKind.Interface
+                    Kind = GraphQLTypeKind.INTERFACE
                 },
                 new GraphQLType
                 {
@@ -135,7 +135,7 @@ public class SDLBuilderTests
                 new GraphQLType
                 {
                     Name = "Query",
-                    Kind = GraphQLTypeKind.Object,
+                    Kind = GraphQLTypeKind.OBJECT,
                     Fields = new List<GraphQLField>
                     {
                         new GraphQLField
@@ -143,7 +143,7 @@ public class SDLBuilderTests
                             Name = "persons",
                             Type = new GraphQLFieldType
                             {
-                                Kind = GraphQLTypeKind.List,
+                                Kind = GraphQLTypeKind.LIST,
                                 OfType = new GraphQLFieldType
                                 {
                                     Name = "Person"
@@ -181,7 +181,7 @@ public class SDLBuilderTests
                 new GraphQLType
                 {
                     Name = "PersonFilter",
-                    Kind = GraphQLTypeKind.Input_Object,
+                    Kind = GraphQLTypeKind.INPUT_OBJECT,
                     InputFields = new List<GraphQLInputField>
                     {
                         new GraphQLInputField
@@ -212,7 +212,7 @@ public class SDLBuilderTests
                 new GraphQLType
                 {
                     Name = "Person",
-                    Kind = GraphQLTypeKind.Object,
+                    Kind = GraphQLTypeKind.OBJECT,
                     Fields = new List<GraphQLField>
                     {
                         new GraphQLField
@@ -313,7 +313,7 @@ public class SDLBuilderTests
             {
                 new GraphQLType
                 {
-                    Kind = GraphQLTypeKind.Enum,
+                    Kind = GraphQLTypeKind.ENUM,
                     Name = "Color",
                     EnumValues = new List<GraphQLEnumValue>
                     {
@@ -342,7 +342,7 @@ public class SDLBuilderTests
                 },
                 new GraphQLType
                 {
-                    Kind = GraphQLTypeKind.Enum,
+                    Kind = GraphQLTypeKind.ENUM,
                     Name = "Status",
                     EnumValues = new List<GraphQLEnumValue>
                     {
