@@ -120,14 +120,14 @@ namespace GraphQL.IntrospectionModel
     }
     public enum GraphQLTypeKind
     {
-        Object = 0,
-        Interface = 1,
-        Scalar = 2,
-        Enum = 3,
-        Input_Object = 4,
-        List = 5,
-        Non_Null = 6,
-        Union = 7,
+        OBJECT = 0,
+        INTERFACE = 1,
+        SCALAR = 2,
+        ENUM = 3,
+        INPUT_OBJECT = 4,
+        LIST = 5,
+        NON_NULL = 6,
+        UNION = 7,
     }
     public interface IDeprecatable
     {

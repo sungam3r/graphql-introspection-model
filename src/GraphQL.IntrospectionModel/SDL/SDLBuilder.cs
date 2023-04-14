@@ -263,27 +263,27 @@ public class SDLBuilder
 
             switch (type.Kind)
             {
-                case GraphQLTypeKind.Enum:
+                case GraphQLTypeKind.ENUM:
                     WriteEnum(type);
                     break;
 
-                case GraphQLTypeKind.Input_Object:
+                case GraphQLTypeKind.INPUT_OBJECT:
                     WriteInput(type);
                     break;
 
-                case GraphQLTypeKind.Interface:
+                case GraphQLTypeKind.INTERFACE:
                     WriteInterface(type);
                     break;
 
-                case GraphQLTypeKind.Object:
+                case GraphQLTypeKind.OBJECT:
                     WriteObject(type);
                     break;
 
-                case GraphQLTypeKind.Scalar:
+                case GraphQLTypeKind.SCALAR:
                     WriteScalar(type);
                     break;
 
-                case GraphQLTypeKind.Union:
+                case GraphQLTypeKind.UNION:
                     WriteUnion(type);
                     break;
 
