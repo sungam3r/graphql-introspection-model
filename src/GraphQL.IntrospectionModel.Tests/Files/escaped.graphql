@@ -1,0 +1,4 @@
+# Description that should be escaped: \", \\, \b, \f, \t
+schema {
+  query: Query
+}

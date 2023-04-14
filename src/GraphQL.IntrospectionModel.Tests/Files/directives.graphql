@@ -1,3 +1,7 @@
+directive @without_location1 on
+
+directive @without_location2 on
+
 directive @my on
   | QUERY
 

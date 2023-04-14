@@ -3,6 +3,9 @@ namespace GraphQL.IntrospectionModel.SDL;
 /// <summary> Output options for creating SDL schemas. </summary>
 public sealed class SDLBuilderOptions
 {
+    /// <summary> Gets or sets a value indicating whether to display comments for schema in the generated SDL. </summary>
+    public bool SchemaComments { get; set; } = true;
+
     /// <summary> Gets or sets a value indicating whether to display comments for types in the generated SDL. </summary>
     public bool TypeComments { get; set; } = true;
 
@@ -18,8 +21,8 @@ public sealed class SDLBuilderOptions
     /// <summary> Gets or sets a value indicating whether to display comments for directives and their arguments in the generated SDL. </summary>
     public bool DirectiveComments { get; set; } = true;
 
-    /// <summary> Gets or sets a value indicating whether to output directives in the generated SDL. </summary>
-    public bool Directives { get; set; } = true;
+    /// <summary> Gets or sets a value indicating whether to output applied directives in the generated SDL. </summary>
+    public bool AppliedDirectives { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether to omit built-in scalars from the generated SDL.

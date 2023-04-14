@@ -1,5 +1,10 @@
-# test
-directive @my(arg: String!) on
+# Author's name
+directive @author(name: String!) on
+  | FIELD_DEFINITION
+  | OBJECT
+
+# Reverts field value
+directive @revert on
   | FIELD_DEFINITION
 
 schema {
@@ -8,19 +13,39 @@ schema {
   subscription: Subscription
 }
 
+type Cat {
+  nickname: String
+  meows: Boolean
+  meowVolume: Int
+}
+
+union CatOrDog = Dog | Cat
+
+type Dog {
+  nickname: String
+  barks: Boolean
+  barkVolume: Int
+}
+
 type Mutation {
   print(
-    person: Person @deprecated(reason: "argument deprecation feature")
+    person: Person
+    format: String @deprecated(reason: "Unused argument")
   ): Boolean
 }
 
 input Person {
+  name: String!
   age: Int!
-  name: String @deprecated(reason: "input field deprecation feature")
+  isDeveloper: Boolean @deprecated(reason: "Use job title instead")
+  isManager: Boolean @deprecated(reason: "Use job title instead")
+  jobTitle: String!
 }
 
 type Query {
   hello: String
+  word: String!
+  catOrDog: CatOrDog
 }
 
 type Subscription {

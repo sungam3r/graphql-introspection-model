@@ -114,7 +114,7 @@ public class SDLBuilder
         {
             return element switch
             {
-                GraphQLDirective _ or GraphQLType _ => Indent.None,
+                GraphQLDirective _ or GraphQLType _ or GraphQLSchema _ => Indent.None,
                 GraphQLArgument _ => parent is GraphQLDirective ? Indent.Single : Indent.Double,
                 _ => Indent.Single,
             };
@@ -129,6 +129,7 @@ public class SDLBuilder
                 GraphQLField _ or GraphQLInputField _ => _options.FieldComments,
                 GraphQLArgument _ => parent is GraphQLDirective ? _options.DirectiveComments : _options.ArgumentComments,
                 GraphQLDirective _ => _options.DirectiveComments,
+                GraphQLSchema _ => _options.SchemaComments,
                 _ => throw new NotSupportedException($"Unknown element '{element.GetType().Name}'"),
             };
         }
@@ -175,7 +176,6 @@ public class SDLBuilder
                 continue;
 
             HandleNewLine();
-
             WriteDescription(directive);
 
             if (directive.Args == null || directive.Args.Count == 0)
@@ -224,10 +224,11 @@ public class SDLBuilder
     private void WriteSchema()
     {
         // skip printing empty schema { }
-        if ((_schema.AppliedDirectives == null || !_options.Directives) && _schema.QueryType == null && _schema.MutationType == null && _schema.SubscriptionType == null)
+        if ((_schema.AppliedDirectives == null || !_options.AppliedDirectives) && _schema.QueryType == null && _schema.MutationType == null && _schema.SubscriptionType == null)
             return;
 
         HandleNewLine();
+        WriteDescription(_schema);
 
         WriteLine($"schema{Directives(_schema)} {{");
 
@@ -410,7 +411,7 @@ public class SDLBuilder
 
     private string Directives(IHasDirectives element)
     {
-        if (!_options.Directives)
+        if (!_options.AppliedDirectives)
             return string.Empty;
 
         // In case of applied directives (if the server supports them) @deprecated should be always among AppliedDirectives

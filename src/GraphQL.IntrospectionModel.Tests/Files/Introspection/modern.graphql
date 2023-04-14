@@ -1,5 +1,10 @@
-# test
-directive @my(arg: String!) on
+# Author's name
+directive @author(name: String!) on
+  | FIELD_DEFINITION
+  | OBJECT
+
+# Reverts field value
+directive @revert on
   | FIELD_DEFINITION
 
 schema {
@@ -8,16 +13,34 @@ schema {
   subscription: Subscription
 }
 
+type Cat {
+  nickname: String
+  meows: Boolean
+  meowVolume: Int
+}
+
+union CatOrDog = Dog | Cat
+
+type Dog {
+  nickname: String
+  barks: Boolean
+  barkVolume: Int
+}
+
 type Mutation {
-  print: Boolean
+  print(person: Person): Boolean
 }
 
 input Person {
+  name: String!
   age: Int!
+  jobTitle: String!
 }
 
 type Query {
-  hello: String @my(arg: "value")
+  hello: String @author(name: "Alice")
+  word: String! @revert @revert
+  catOrDog: CatOrDog
 }
 
 type Subscription {

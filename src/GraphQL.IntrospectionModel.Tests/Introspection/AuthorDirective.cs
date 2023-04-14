@@ -3,15 +3,15 @@ using GraphQLParser.AST;
 
 namespace GraphQL.IntrospectionModel.Tests.Introspection;
 
-internal class MyDirective : Directive
+internal class AuthorDirective : Directive
 {
-    public MyDirective()
-        : base("my", DirectiveLocation.FieldDefinition)
+    public AuthorDirective()
+        : base("author", DirectiveLocation.FieldDefinition, DirectiveLocation.Object)
     {
-        Description = "test";
+        Description = "Author's name";
         Arguments = new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>>
         {
-            Name = "arg"
+            Name = "name"
         });
     }
 
