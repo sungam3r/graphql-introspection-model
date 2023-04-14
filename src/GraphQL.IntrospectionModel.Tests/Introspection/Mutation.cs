@@ -2,15 +2,17 @@ using GraphQL.Types;
 
 namespace GraphQL.IntrospectionModel.Tests.Introspection;
 
-internal class Mutation : ObjectGraphType<Person>
+internal class Mutation : ObjectGraphType
 {
     public Mutation()
     {
         Field<BooleanGraphType>("print")
-            .Argument<PersonGraphType>("person", arg => arg.DeprecationReason = "argument deprecation feature")
+            .Argument<PersonGraphType>("person")
+            .Argument<StringGraphType>("format", arg => arg.DeprecationReason = "Unused argument")
             .Resolve(context =>
         {
-            Console.WriteLine(context.Source);
+            var person = context.GetArgument<Person>("person");
+            Console.WriteLine(person);
             return true;
         });
     }
@@ -20,8 +22,11 @@ internal class PersonGraphType : InputObjectGraphType<Person>
 {
     public PersonGraphType()
     {
+        Field(x => x.Name);
         Field(x => x.Age);
-        Field(x => x.Name, nullable: true).DeprecationReason("input field deprecation feature");
+        Field(x => x.IsDeveloper, nullable: true).DeprecationReason("Use job title instead");
+        Field(x => x.IsManager, nullable: true).DeprecationReason("Use job title instead");
+        Field(x => x.JobTitle);
     }
 }
 
@@ -30,6 +35,12 @@ internal class Person
     public string? Name { get; set; }
 
     public int Age { get; set; }
+
+    public bool IsDeveloper { get; set; }
+
+    public bool IsManager { get; set; }
+
+    public string? JobTitle { get; set; }
 
     public override string ToString() => $"{Name}: {Age}";
 }

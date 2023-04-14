@@ -12,6 +12,6 @@ internal class TestSchema : Schema
         Mutation = new Mutation();
         Subscription = new Subscription();
 
-        Directives.Register(new MyDirective());
+        Directives.Register(new AuthorDirective(), new RevertDirective());
     }
 }

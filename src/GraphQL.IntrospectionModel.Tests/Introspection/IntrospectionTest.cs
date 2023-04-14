@@ -2,8 +2,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using GraphQL.IntrospectionModel.SDL;
 using Microsoft.Extensions.DependencyInjection;
-using Shouldly;
-using Xunit;
 
 namespace GraphQL.IntrospectionModel.Tests.Introspection;
 

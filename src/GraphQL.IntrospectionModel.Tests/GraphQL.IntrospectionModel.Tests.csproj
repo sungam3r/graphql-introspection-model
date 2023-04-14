@@ -33,4 +33,9 @@
     <ProjectReference Include="..\GraphQL.IntrospectionModel\GraphQL.IntrospectionModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="Shouldly" />
+    <Using Include="Xunit" />
+  </ItemGroup>
+
 </Project>

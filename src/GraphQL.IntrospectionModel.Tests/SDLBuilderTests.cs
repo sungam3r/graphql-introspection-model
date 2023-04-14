@@ -1,8 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using GraphQL.IntrospectionModel.SDL;
-using Shouldly;
-using Xunit;
 
 namespace GraphQL.IntrospectionModel.Tests;
 
@@ -235,12 +233,56 @@ public class SDLBuilderTests
     }
 
     [Fact]
+    public void Should_Build_Scalars()
+    {
+        var schema = new GraphQLSchema
+        {
+            Types = new List<GraphQLType>
+            {
+                new GraphQLType
+                {
+                    Kind = GraphQLTypeKind.SCALAR,
+                    Name = "Xml",
+                },
+                new GraphQLType
+                {
+                    Kind = GraphQLTypeKind.SCALAR,
+                    Name = "JSON",
+                    AppliedDirectives = new List<GraphQLAppliedDirective>
+                    {
+                        new GraphQLAppliedDirective
+                        {
+                            Name = "some"
+                        }
+                    }
+                }
+            }
+        };
+
+        string sdl = SDLBuilder.Build(schema, new SDLBuilderOptions { TypeComparer = null });
+
+        sdl.ShouldBe(ReadFile("scalars.graphql"));
+    }
+
+    [Fact]
     public void Should_Build_Directives()
     {
         var schema = new GraphQLSchema
         {
             Directives = new List<GraphQLDirective>
             {
+                // invalid usage, but should not throw
+                new GraphQLDirective
+                {
+                    Name = "without_location1",
+                    Locations = null!,
+                },
+                // invalid usage, but should not throw
+                new GraphQLDirective
+                {
+                    Name = "without_location2",
+                    Locations = new List<GraphQLDirectiveLocation>(),
+                },
                 new GraphQLDirective
                 {
                     Name = "my",
@@ -367,9 +409,28 @@ public class SDLBuilderTests
             }
         };
 
+        string sdl1 = SDLBuilder.Build(schema);
+        sdl1.ShouldBe(ReadFile("enums.graphql"));
+
+        string sdl2 = SDLBuilder.Build(schema, new SDLBuilderOptions { AppliedDirectives = false });
+        sdl2.ShouldBe(ReadFile("enums_without_directives.graphql"));
+    }
+
+    [Fact]
+    public void Should_Build_Schema_With_Escaped_Description()
+    {
+        var schema = new GraphQLSchema
+        {
+            Description = "Description that should be escaped: \", \\, \b, \f, \t",
+            QueryType = new GraphQLRequestType
+            {
+                Name = "Query",
+            },
+        };
+
         string sdl = SDLBuilder.Build(schema);
 
-        sdl.ShouldBe(ReadFile("enums.graphql"));
+        sdl.ShouldBe(ReadFile("escaped.graphql"));
     }
 
     private static string ReadFile(string fileName)
