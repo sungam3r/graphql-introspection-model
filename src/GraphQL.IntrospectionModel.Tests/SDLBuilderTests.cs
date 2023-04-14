@@ -1,5 +1,6 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using GraphQL.IntrospectionModel.SDL;
-using Newtonsoft.Json.Linq;
 using Shouldly;
 using Xunit;
 
@@ -14,8 +15,8 @@ public class SDLBuilderTests
     public void Should_Build_Schema_From_Introspection()
     {
         string introspection = ReadFile("test1.json");
-        var schemaJson = JObject.Parse(introspection).Property("__schema")!.Value;
-        var schema = schemaJson.ToObject<GraphQLSchema>();
+        var schemaElement = JsonDocument.Parse(introspection).RootElement.GetProperty("__schema");
+        var schema = JsonSerializer.Deserialize<GraphQLSchema>(schemaElement, new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } });
         string sdl = SDLBuilder.Build(schema!);
         sdl.ShouldBe(ReadFile("test1.graphql"));
     }

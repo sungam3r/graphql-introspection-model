@@ -370,9 +370,9 @@ public class SDLBuilder
         {
             WriteDescription(field);
 
-            if (field.Args == null || field.Args.All(arg => arg.Description == null && (arg.AppliedDirectives?.Count ?? 0) == 0))
+            if (field.Args == null || field.Args.All(arg => arg.Description == null && arg.DeprecationReason == null && (arg.AppliedDirectives?.Count ?? 0) == 0))
             {
-                // if no field argument has descriptions and directives, then write the entire field signature in one line
+                // if no field argument has description, deprecation reason and directives, then write the entire field signature in one line
                 WriteLine($"{field.Name}{Arguments(field)}: {field.Type.SDLType}{Directives(field)}", indent: Indent.Single);
             }
             else

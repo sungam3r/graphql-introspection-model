@@ -1,0 +1,28 @@
+# test
+directive @my(arg: String!) on
+  | FIELD_DEFINITION
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type Mutation {
+  print(
+    person: Person @deprecated(reason: "argument deprecation feature")
+  ): Boolean
+}
+
+input Person {
+  age: Int!
+  name: String @deprecated(reason: "input field deprecation feature")
+}
+
+type Query {
+  hello: String @my(arg: "value")
+}
+
+type Subscription {
+  values: [Int]
+}
