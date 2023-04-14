@@ -263,27 +263,27 @@ public class SDLBuilder
 
             switch (type.Kind)
             {
-                case GraphQLTypeKind.Enum:
+                case GraphQLTypeKind.ENUM:
                     WriteEnum(type);
                     break;
 
-                case GraphQLTypeKind.Input_Object:
+                case GraphQLTypeKind.INPUT_OBJECT:
                     WriteInput(type);
                     break;
 
-                case GraphQLTypeKind.Interface:
+                case GraphQLTypeKind.INTERFACE:
                     WriteInterface(type);
                     break;
 
-                case GraphQLTypeKind.Object:
+                case GraphQLTypeKind.OBJECT:
                     WriteObject(type);
                     break;
 
-                case GraphQLTypeKind.Scalar:
+                case GraphQLTypeKind.SCALAR:
                     WriteScalar(type);
                     break;
 
-                case GraphQLTypeKind.Union:
+                case GraphQLTypeKind.UNION:
                     WriteUnion(type);
                     break;
 
@@ -370,7 +370,7 @@ public class SDLBuilder
         {
             WriteDescription(field);
 
-            if (field.Args == null || field.Args.All(arg => arg.Description == null && (arg.AppliedDirectives?.Count ?? 0) == 0))
+            if (field.Args == null || field.Args.All(arg => arg.Description == null && arg.DeprecationReason == null && (arg.AppliedDirectives?.Count ?? 0) == 0))
             {
                 // if no field argument has descriptions and directives, then write the entire field signature in one line
                 WriteLine($"{field.Name}{Arguments(field)}: {field.Type.SDLType}{Directives(field)}", indent: Indent.Single);

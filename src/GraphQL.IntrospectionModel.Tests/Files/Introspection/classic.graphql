@@ -1,0 +1,25 @@
+# test
+directive @my(arg: String!) on
+  | FIELD_DEFINITION
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type Mutation {
+  print: Boolean
+}
+
+input Person {
+  age: Int!
+}
+
+type Query {
+  hello: String
+}
+
+type Subscription {
+  values: [Int]
+}

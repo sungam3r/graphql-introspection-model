@@ -115,7 +115,7 @@ public static class IntrospectionQuery
         name
         description
         locations
-        args(includeDeprecated: true) {
+        args {
           ...InputValue
         }
       }
@@ -322,7 +322,7 @@ public static class IntrospectionQuery
         name
         description
         locations
-        args(includeDeprecated: true) {
+        args {
           ...InputValue
         }
       }
