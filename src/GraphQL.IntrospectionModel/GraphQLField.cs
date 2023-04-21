@@ -3,7 +3,7 @@ using System.Diagnostics;
 namespace GraphQL.IntrospectionModel;
 
 /// <summary> A field of some output type. </summary>
-[DebuggerDisplay("{Name,nq}: {Type.SDLType,nq}")]
+[DebuggerDisplay("{Name,nq} ({Type,nq})")]
 public sealed class GraphQLField : GraphQLNamedObject, IDeprecatable
 {
     /// <summary> Gets or sets the type of this field. </summary>

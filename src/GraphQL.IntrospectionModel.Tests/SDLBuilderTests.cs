@@ -425,15 +425,52 @@ public class SDLBuilderTests
     }
 
     [Fact]
-    public void Should_Build_Schema_With_Escaped_Description()
+    public void Should_Build_Escaped_DeprecationReason()
     {
         var schema = new GraphQLSchema
         {
-            Description = "Description that should be escaped: \", \\, \b, \f, \n, \r, \t",
-            QueryType = new GraphQLRequestType
+            Types = new List<GraphQLType>
             {
-                Name = "Query",
-            },
+                new GraphQLType
+                {
+                    Name = "Query",
+                    Fields = new List<GraphQLField>
+                    {
+                        new GraphQLField
+                        {
+                            Name = "field1",
+                            DeprecationReason = "Reason that should be escaped: \", \\, \b, \f, \n, \r, \t", // as is
+                            Type = new GraphQLFieldType
+                            {
+                               Name = "String"
+                            }
+                        },
+                        new GraphQLField
+                        {
+                            Name = "field2",
+                            Type = new GraphQLFieldType
+                            {
+                                Name = "String"
+                            },
+                            AppliedDirectives = new List<GraphQLAppliedDirective>
+                            {
+                                new GraphQLAppliedDirective
+                                {
+                                    Name = "deprecated",
+                                    Args = new List<GraphQLDirectiveArgument>
+                                    {
+                                        new GraphQLDirectiveArgument
+                                        {
+                                            Name = "reason",
+                                            Value = "\"Reason that should be escaped: \\\", \\\\, \\b, \\f, \\n, \\r, \\t\"" // escaped string value
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         };
 
         string sdl = schema.Print();

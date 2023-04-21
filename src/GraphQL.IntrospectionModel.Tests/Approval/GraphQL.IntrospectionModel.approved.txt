@@ -63,7 +63,6 @@ namespace GraphQL.IntrospectionModel
     {
         public GraphQLFieldType() { }
         public GraphQL.IntrospectionModel.GraphQLFieldType? OfType { get; set; }
-        public string SDLType { get; }
     }
     public sealed class GraphQLInputField : GraphQL.IntrospectionModel.GraphQLInputValue
     {
