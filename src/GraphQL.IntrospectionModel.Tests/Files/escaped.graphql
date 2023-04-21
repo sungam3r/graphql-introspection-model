@@ -1,4 +1,4 @@
-"Description that should be escaped: \", \\, \b, \f, \n, \r, \t"
-schema {
-  query: Query
+type Query {
+  field1: String @deprecated(reason: "Reason that should be escaped: \", \\, \b, \f, \n, \r, \t")
+  field2: String @deprecated(reason: "Reason that should be escaped: \", \\, \b, \f, \n, \r, \t")
 }
