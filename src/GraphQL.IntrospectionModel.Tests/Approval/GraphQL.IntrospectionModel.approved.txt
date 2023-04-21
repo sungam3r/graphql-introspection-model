@@ -6,13 +6,9 @@ namespace GraphQL.IntrospectionModel
         public System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLDirectiveArgument>? Args { get; set; }
         public string Name { get; set; }
     }
-    public sealed class GraphQLArgument : GraphQL.IntrospectionModel.GraphQLNamedObject, GraphQL.IntrospectionModel.IDeprecatable
+    public sealed class GraphQLArgument : GraphQL.IntrospectionModel.GraphQLInputValue
     {
         public GraphQLArgument() { }
-        public string? DefaultValue { get; set; }
-        public string? DeprecationReason { get; set; }
-        public bool IsDeprecated { get; set; }
-        public GraphQL.IntrospectionModel.GraphQLFieldType Type { get; set; }
     }
     public sealed class GraphQLDirective : GraphQL.IntrospectionModel.GraphQLNamedObject
     {
@@ -29,25 +25,25 @@ namespace GraphQL.IntrospectionModel
     }
     public enum GraphQLDirectiveLocation
     {
-        Query = 0,
-        Mutation = 1,
-        Subscription = 2,
-        Field = 3,
-        Fragment_Definition = 4,
-        Fragment_Spread = 5,
-        Inline_Fragment = 6,
-        Variable_Definition = 7,
-        Schema = 8,
-        Scalar = 9,
-        Object = 10,
-        Field_Definition = 11,
-        Argument_Definition = 12,
-        Interface = 13,
-        Union = 14,
-        Enum = 15,
-        Enum_Value = 16,
-        Input_Object = 17,
-        Input_Field_Definition = 18,
+        QUERY = 0,
+        MUTATION = 1,
+        SUBSCRIPTION = 2,
+        FIELD = 3,
+        FRAGMENT_DEFINITION = 4,
+        FRAGMENT_SPREAD = 5,
+        INLINE_FRAGMENT = 6,
+        VARIABLE_DEFINITION = 7,
+        SCHEMA = 8,
+        SCALAR = 9,
+        OBJECT = 10,
+        FIELD_DEFINITION = 11,
+        ARGUMENT_DEFINITION = 12,
+        INTERFACE = 13,
+        UNION = 14,
+        ENUM = 15,
+        ENUM_VALUE = 16,
+        INPUT_OBJECT = 17,
+        INPUT_FIELD_DEFINITION = 18,
     }
     public sealed class GraphQLEnumValue : GraphQL.IntrospectionModel.GraphQLNamedObject, GraphQL.IntrospectionModel.IDeprecatable
     {
@@ -69,9 +65,13 @@ namespace GraphQL.IntrospectionModel
         public GraphQL.IntrospectionModel.GraphQLFieldType? OfType { get; set; }
         public string SDLType { get; }
     }
-    public sealed class GraphQLInputField : GraphQL.IntrospectionModel.GraphQLNamedObject, GraphQL.IntrospectionModel.IDeprecatable
+    public sealed class GraphQLInputField : GraphQL.IntrospectionModel.GraphQLInputValue
     {
         public GraphQLInputField() { }
+    }
+    public abstract class GraphQLInputValue : GraphQL.IntrospectionModel.GraphQLNamedObject, GraphQL.IntrospectionModel.IDeprecatable
+    {
+        protected GraphQLInputValue() { }
         public string? DefaultValue { get; set; }
         public string? DeprecationReason { get; set; }
         public bool IsDeprecated { get; set; }
@@ -152,24 +152,50 @@ namespace GraphQL.IntrospectionModel
 }
 namespace GraphQL.IntrospectionModel.SDL
 {
-    public class SDLBuilder
+    public class ASTConverter
     {
-        public static string Build(GraphQL.IntrospectionModel.GraphQLSchema schema) { }
-        public static string Build(GraphQL.IntrospectionModel.GraphQLSchema schema, GraphQL.IntrospectionModel.SDL.SDLBuilderOptions options) { }
+        public ASTConverter() { }
+        public ASTConverter(GraphQL.IntrospectionModel.SDL.ASTConverterOptions options) { }
+        public virtual GraphQLParser.AST.GraphQLArgument? ToArgument(GraphQL.IntrospectionModel.GraphQLDirectiveArgument argument) { }
+        public virtual GraphQLParser.AST.GraphQLArguments? ToArguments(System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLDirectiveArgument>? arguments) { }
+        public virtual GraphQLParser.AST.GraphQLArgumentsDefinition? ToArgumentsDefinition(System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLArgument>? arguments) { }
+        public virtual GraphQLParser.AST.GraphQLDescription? ToDescription(GraphQL.IntrospectionModel.IHasDescription element) { }
+        public virtual GraphQLParser.AST.GraphQLDirective? ToDirective(GraphQL.IntrospectionModel.GraphQLAppliedDirective directive) { }
+        public virtual GraphQLParser.AST.GraphQLDirectiveDefinition? ToDirectiveDefinition(GraphQL.IntrospectionModel.GraphQLDirective directive) { }
+        public virtual GraphQLParser.AST.GraphQLDirectiveLocations ToDirectiveLocations(System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLDirectiveLocation>? locations) { }
+        public virtual GraphQLParser.AST.GraphQLDirectives? ToDirectives(GraphQL.IntrospectionModel.IHasDirectives element) { }
+        public virtual GraphQLParser.AST.GraphQLDocument ToDocument(GraphQL.IntrospectionModel.GraphQLSchema schema) { }
+        public virtual GraphQLParser.AST.GraphQLEnumTypeDefinition? ToEnumTypeDefinition(GraphQL.IntrospectionModel.GraphQLType type) { }
+        public virtual GraphQLParser.AST.GraphQLEnumValueDefinition? ToEnumValueDefinition(GraphQL.IntrospectionModel.GraphQLEnumValue value) { }
+        public virtual GraphQLParser.AST.GraphQLEnumValuesDefinition? ToEnumValuesDefinition(System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLEnumValue>? values) { }
+        public virtual GraphQLParser.AST.GraphQLFieldDefinition? ToFieldDefinition(GraphQL.IntrospectionModel.GraphQLField field) { }
+        public virtual GraphQLParser.AST.GraphQLFieldsDefinition? ToFieldsDefinition(System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLField>? fields) { }
+        public virtual GraphQLParser.AST.GraphQLImplementsInterfaces? ToImplementsInterfaces(System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLFieldType>? types) { }
+        public virtual GraphQLParser.AST.GraphQLInputFieldsDefinition? ToInputFieldsDefinition(System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLInputField>? fields) { }
+        public virtual GraphQLParser.AST.GraphQLInputObjectTypeDefinition? ToInputObjectTypeDefinition(GraphQL.IntrospectionModel.GraphQLType type) { }
+        public virtual GraphQLParser.AST.GraphQLInputValueDefinition ToInputValueDefinition(GraphQL.IntrospectionModel.GraphQLArgument argument) { }
+        public virtual GraphQLParser.AST.GraphQLInputValueDefinition ToInputValueDefinition(GraphQL.IntrospectionModel.GraphQLInputField field) { }
+        public virtual GraphQLParser.AST.GraphQLInterfaceTypeDefinition? ToInterfaceTypeDefinition(GraphQL.IntrospectionModel.GraphQLType type) { }
+        public virtual GraphQLParser.AST.GraphQLObjectTypeDefinition? ToObjectTypeDefinition(GraphQL.IntrospectionModel.GraphQLType type) { }
+        public virtual GraphQLParser.AST.GraphQLScalarTypeDefinition? ToScalarTypeDefinition(GraphQL.IntrospectionModel.GraphQLType type) { }
+        public virtual GraphQLParser.AST.GraphQLSchemaDefinition? ToSchemaDefinition(GraphQL.IntrospectionModel.GraphQLSchema schema) { }
+        public virtual GraphQLParser.AST.GraphQLType ToType(GraphQL.IntrospectionModel.GraphQLFieldType type) { }
+        public virtual GraphQLParser.AST.GraphQLTypeDefinition? ToTypeDefinition(GraphQL.IntrospectionModel.GraphQLType type) { }
+        public virtual GraphQLParser.AST.GraphQLUnionMemberTypes? ToUnionMemberTypes(System.Collections.Generic.ICollection<GraphQL.IntrospectionModel.GraphQLFieldType>? types) { }
+        public virtual GraphQLParser.AST.GraphQLUnionTypeDefinition? ToUnionTypeDefinition(GraphQL.IntrospectionModel.GraphQLType type) { }
+        public virtual GraphQLParser.AST.GraphQLValue? ToValue(string? value) { }
     }
-    public sealed class SDLBuilderOptions
+    public sealed class ASTConverterOptions : GraphQLParser.Visitors.SDLPrinterOptions
     {
-        public SDLBuilderOptions() { }
-        public bool AppliedDirectives { get; set; }
-        public bool ArgumentComments { get; set; }
-        public bool DirectiveComments { get; set; }
+        public ASTConverterOptions() { }
         public System.Collections.Generic.IComparer<GraphQL.IntrospectionModel.GraphQLDirective>? DirectiveComparer { get; set; }
-        public bool EnumValuesComments { get; set; }
-        public bool FieldComments { get; set; }
-        public int IndentSize { get; set; }
         public bool OmitBuiltInScalars { get; set; }
-        public bool SchemaComments { get; set; }
-        public bool TypeComments { get; set; }
+        public bool PrintAppliedDirectives { get; set; }
+        public bool PrintDescriptions { get; set; }
         public System.Collections.Generic.IComparer<GraphQL.IntrospectionModel.GraphQLType>? TypeComparer { get; set; }
+    }
+    public static class Helpers
+    {
+        public static string Print(this GraphQL.IntrospectionModel.GraphQLSchema schema, GraphQL.IntrospectionModel.SDL.ASTConverterOptions? options = null) { }
     }
 }

@@ -2,7 +2,7 @@ using GraphQL.Types;
 
 namespace GraphQL.IntrospectionModel.Tests.Introspection;
 
-internal class Query : ObjectGraphType
+internal sealed class Query : ObjectGraphType
 {
     public Query()
     {

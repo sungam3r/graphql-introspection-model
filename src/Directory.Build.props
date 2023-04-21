@@ -18,8 +18,9 @@
     <!-- https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables -->
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">True</ContinuousIntegrationBuild>
     <Nullable>enable</Nullable>
-    <PackageReadmeFile Condition="'$(IsPackable)' == 'true'">README.md</PackageReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>Recommended</AnalysisMode>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 

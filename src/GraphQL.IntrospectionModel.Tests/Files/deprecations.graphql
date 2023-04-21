@@ -7,7 +7,5 @@ input PersonFilter {
 }
 
 type Query {
-  persons(
-    filter: PersonFilter @deprecated(reason: "Do not use this arg")
-  ): [Person]
+  persons(filter: PersonFilter @deprecated(reason: "Do not use this arg")): [Person]
 }
