@@ -8,11 +8,6 @@ namespace GraphQL.IntrospectionModel.SDL;
 public sealed class ASTConverterOptions : SDLPrinterOptions
 {
     /// <summary>
-    /// Print descriptions into the output.
-    /// </summary>
-    public bool PrintDescriptions { get; set; } = true;
-
-    /// <summary>
     /// Gets or sets a value indicating whether to output applied directives in the generated SDL.
     /// @deprecated directive (if any) is always printed regardless of the value of this property.
     /// </summary>

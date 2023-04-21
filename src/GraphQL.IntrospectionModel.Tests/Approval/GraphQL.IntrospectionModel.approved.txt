@@ -190,7 +190,6 @@ namespace GraphQL.IntrospectionModel.SDL
         public System.Collections.Generic.IComparer<GraphQL.IntrospectionModel.GraphQLDirective>? DirectiveComparer { get; set; }
         public bool OmitBuiltInScalars { get; set; }
         public bool PrintAppliedDirectives { get; set; }
-        public bool PrintDescriptions { get; set; }
         public System.Collections.Generic.IComparer<GraphQL.IntrospectionModel.GraphQLType>? TypeComparer { get; set; }
     }
     public static class Helpers

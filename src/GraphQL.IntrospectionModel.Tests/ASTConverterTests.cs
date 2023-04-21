@@ -1,16 +1,21 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using GraphQL.IntrospectionModel.SDL;
+using GraphQLParser.Visitors;
 
 namespace GraphQL.IntrospectionModel.Tests;
 
-public class SDLBuilderTests
+public class ASTConverterTests
 {
-    /// <summary>
-    /// SDLBuilder should build schema from introspection response.
-    /// </summary>
     [Fact]
-    public void Should_Build_Schema_From_Introspection()
+    public void ASTConverter_ToTypeDefinition_Should_Throw_On_Unknown_TypeKind()
+    {
+        var converter = new ASTConverter();
+        Should.Throw<NotSupportedException>(() => converter.ToTypeDefinition(new GraphQLType { Kind = (GraphQLTypeKind)12345 })).Message.ShouldBe("12345");
+    }
+
+    [Fact]
+    public void Should_Build_Schema_From_Introspection_Response()
     {
         string introspection = ReadFile("test1.json");
         var schemaElement = JsonDocument.Parse(introspection).RootElement.GetProperty("__schema");
@@ -23,9 +28,6 @@ public class SDLBuilderTests
         sdl.ShouldBe(ReadFile("test1.graphql"));
     }
 
-    /// <summary>
-    /// SDLBuilder should build simple schema.
-    /// </summary>
     [Fact]
     public void Should_Build_Person_Schema()
     {
@@ -356,6 +358,28 @@ public class SDLBuilderTests
     }
 
     [Fact]
+    public void Should_Build_Empty_Schema()
+    {
+        var schema = new GraphQLSchema
+        {
+            QueryType = new GraphQLRequestType
+            {
+                Name = "Query"
+            }
+        };
+
+        // also tests parameterless ctor
+        var document = new ASTConverter().ToDocument(schema);
+        string sdl = new SDLPrinter().Print(document);
+
+        sdl.ShouldBe("""
+            schema {
+              query: Query
+            }
+            """);
+    }
+
+    [Fact]
     public void Should_Build_Enums()
     {
         var schema = new GraphQLSchema
@@ -439,7 +463,7 @@ public class SDLBuilderTests
                         new GraphQLField
                         {
                             Name = "field1",
-                            DeprecationReason = "Reason that should be escaped: \", \\, \b, \f, \n, \r, \t", // as is
+                            DeprecationReason = "Reason that should be escaped: \", \\, \b, \f, \n, \r, \t \u0005 ", // as is
                             Type = new GraphQLFieldType
                             {
                                Name = "String"
@@ -462,7 +486,7 @@ public class SDLBuilderTests
                                         new GraphQLDirectiveArgument
                                         {
                                             Name = "reason",
-                                            Value = "\"Reason that should be escaped: \\\", \\\\, \\b, \\f, \\n, \\r, \\t\"" // escaped string value
+                                            Value = "\"Reason that should be escaped: \\\", \\\\, \\b, \\f, \\n, \\r, \\t \\u0005 \"" // escaped string value
                                         }
                                     }
                                 }

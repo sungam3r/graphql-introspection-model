@@ -42,9 +42,6 @@ public partial class ASTConverter
     {
         IEnumerable<GraphQLDirective> SortedDirectives()
         {
-            if (schema.Directives == null)
-                return Array.Empty<GraphQLDirective>();
-
             if (_options.DirectiveComparer == null)
                 return schema.Directives;
 
