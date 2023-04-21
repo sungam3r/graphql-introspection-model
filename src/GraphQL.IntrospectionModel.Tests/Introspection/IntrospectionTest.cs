@@ -44,16 +44,12 @@ public sealed class IntegrationTest : IDisposable
         var serializer = _provider.GetRequiredService<IGraphQLTextSerializer>();
 
         var actual = serializer.Serialize(result);
-        var schemaElement = JsonDocument.Parse(actual).RootElement.GetProperty("data").GetProperty("__schema");
-        var model = JsonSerializer.Deserialize<GraphQLSchema>(schemaElement, new JsonSerializerOptions
+        var response = JsonSerializer.Deserialize<GraphQLResponse>(actual, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
-            Converters =
-            {
-                new JsonStringEnumConverter(),
-            }
+            Converters = { new JsonStringEnumConverter() }
         });
-        string sdl = model!.Print(new ASTConverterOptions { EachDirectiveLocationOnNewLine = true });
+        string sdl = response.ShouldNotBeNull().Data.ShouldNotBeNull().__Schema.ShouldNotBeNull().Print(new ASTConverterOptions { EachDirectiveLocationOnNewLine = true });
         sdl.ShouldBe(expected);
     }
 

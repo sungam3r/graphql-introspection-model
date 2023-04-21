@@ -127,18 +127,18 @@ Such data structures are provided by this repository. The top level type is [`Gr
 After deserialization JSON into the `GraphQLSchema` (or after creating `GraphQLSchema` in any other way), it can be transformed into AST
 representation and then printed by `SDLPrinter` from [GraphQL-Parser](https://github.com/graphql-dotnet/parser) nuget package.
 
-#### Example of deserializing introspection response into `GraphQLSchema`
+#### Example of deserializing introspection response
 
 ```csharp
 using System.Text.Json;
 
 string text = ...; // from HTTP introspection response
-var schemaElement = JsonDocument.Parse(actual).RootElement.GetProperty("data").GetProperty("__schema");
-var schema = JsonSerializer.Deserialize<GraphQLSchema>(schemaElement, new JsonSerializerOptions
+var response = JsonSerializer.Deserialize<GraphQLResponse>(text, new JsonSerializerOptions
 {
     PropertyNameCaseInsensitive = true,
     Converters = { new JsonStringEnumConverter() }
 });
+var schema = response.Data.__Schema; // note that Data may be null, so check response.Errors 
 ```
 
 #### Example of printing `GraphQLSchema` into SDL

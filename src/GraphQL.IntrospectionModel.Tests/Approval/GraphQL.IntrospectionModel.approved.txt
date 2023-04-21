@@ -10,6 +10,11 @@ namespace GraphQL.IntrospectionModel
     {
         public GraphQLArgument() { }
     }
+    public class GraphQLData
+    {
+        public GraphQLData() { }
+        public GraphQL.IntrospectionModel.GraphQLSchema? @__Schema { get; set; }
+    }
     public sealed class GraphQLDirective : GraphQL.IntrospectionModel.GraphQLNamedObject
     {
         public GraphQLDirective() { }
@@ -51,6 +56,11 @@ namespace GraphQL.IntrospectionModel
         public string? DeprecationReason { get; set; }
         public bool IsDeprecated { get; set; }
     }
+    public sealed class GraphQLError
+    {
+        public GraphQLError() { }
+        public string? Message { get; set; }
+    }
     public sealed class GraphQLField : GraphQL.IntrospectionModel.GraphQLNamedObject, GraphQL.IntrospectionModel.IDeprecatable
     {
         public GraphQLField() { }
@@ -87,6 +97,12 @@ namespace GraphQL.IntrospectionModel
     {
         public GraphQLRequestType() { }
         public string Name { get; set; }
+    }
+    public class GraphQLResponse
+    {
+        public GraphQLResponse() { }
+        public GraphQL.IntrospectionModel.GraphQLData? Data { get; set; }
+        public GraphQL.IntrospectionModel.GraphQLError[]? Errors { get; set; }
     }
     public sealed class GraphQLSchema : GraphQL.IntrospectionModel.IHasDescription, GraphQL.IntrospectionModel.IHasDirectives
     {
