@@ -1,4 +1,4 @@
-﻿namespace GraphQL.IntrospectionModel;
+namespace GraphQL.IntrospectionModel;
 
 /// <summary>
 /// This type represents field and directive arguments as well as the input fields of an input object.
