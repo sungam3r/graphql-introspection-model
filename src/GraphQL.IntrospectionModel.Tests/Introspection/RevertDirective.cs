@@ -3,7 +3,7 @@ using GraphQLParser.AST;
 
 namespace GraphQL.IntrospectionModel.Tests.Introspection;
 
-internal class RevertDirective : Directive
+internal sealed class RevertDirective : Directive
 {
     public RevertDirective()
         : base("revert", DirectiveLocation.FieldDefinition)

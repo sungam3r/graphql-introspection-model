@@ -1,6 +1,6 @@
 enum Color {
   RED
-  GREEN
+  GREEN @deprecated(reason: "Use RED")
   BLUE
 }
 

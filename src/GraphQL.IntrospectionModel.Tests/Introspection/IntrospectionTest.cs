@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace GraphQL.IntrospectionModel.Tests.Introspection;
 
-public class IntegrationTest : IDisposable
+public sealed class IntegrationTest : IDisposable
 {
     private readonly ServiceProvider _provider;
 
@@ -26,7 +26,7 @@ public class IntegrationTest : IDisposable
     }
 
     private static string ReadFile(string fileName)
-        => File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Files", "Introspection", fileName));
+        => File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Files", "Introspection", fileName));
 
     private async Task ShouldMatchAsync(string query, string expected)
     {
@@ -45,8 +45,15 @@ public class IntegrationTest : IDisposable
 
         var actual = serializer.Serialize(result);
         var schemaElement = JsonDocument.Parse(actual).RootElement.GetProperty("data").GetProperty("__schema");
-        var model = JsonSerializer.Deserialize<GraphQLSchema>(schemaElement, new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } });
-        string sdl = SDLBuilder.Build(model!);
+        var model = JsonSerializer.Deserialize<GraphQLSchema>(schemaElement, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            Converters =
+            {
+                new JsonStringEnumConverter(),
+            }
+        });
+        string sdl = model!.Print(new ASTConverterOptions { EachDirectiveLocationOnNewLine = true });
         sdl.ShouldBe(expected);
     }
 

@@ -124,19 +124,35 @@ fragment TypeRef on __Type {
 
 The result of this query (like all other GraphQL queries) is JSON. You can deal with it directly or deserialize it into some data structures.
 Such data structures are provided by this repository. The top level type is [`GraphQLSchema`](src/GraphQL.IntrospectionModel/GraphQLSchema.cs).
-After deserialization JSON into the `GraphQLSchema` (or after creating `GraphQLSchema` in any other way), it can be printed as SDL document
-using [`SDLBuilder`](src/GraphQL.IntrospectionModel/SDL/SDLBuilder.cs):
+After deserialization JSON into the `GraphQLSchema` (or after creating `GraphQLSchema` in any other way), it can be transformed into AST
+representation and then printed by `SDLPrinter` from [GraphQL-Parser](https://github.com/graphql-dotnet/parser) nuget package.
+
+#### Example of deserializing introspection response into `GraphQLSchema`
+
+```csharp
+using System.Text.Json;
+
+string text = ...; // from HTTP introspection response
+var schemaElement = JsonDocument.Parse(actual).RootElement.GetProperty("data").GetProperty("__schema");
+var schema = JsonSerializer.Deserialize<GraphQLSchema>(schemaElement, new JsonSerializerOptions
+{
+    PropertyNameCaseInsensitive = true,
+    Converters = { new JsonStringEnumConverter() }
+});
+```
+
+#### Example of printing `GraphQLSchema` into SDL
 
 ```csharp
 GraphQLSchema schema = ...;
 
-// default
-var sdl = SDLBuilder.Build(schema);
+var converter = new ASTConverter();
+var document = converter.ToDocument(schema);
+var printer = new SDLPrinter(options);
+var sdl = printer.Print(document);
 
-// customized
-var sdl = SDLBuilder.Build(schema, new SDLBuilderOptions { IndentSize = 4, ArgumentComments = false });
-
-File.WriteAllText("MySchema.graphql", sdl);
+// or use one-line extension method
+var sdl = schema.Print();
 ```
 
 GraphQL has its own language to write GraphQL schemas, [SDL](https://graphql.github.io/graphql-spec/October2021/#sec-Type-System) - Schema Definition Language.
@@ -146,4 +162,4 @@ Many types in this project implement the [`IHasDirectives`](src/GraphQL.Introspe
 about the directives applied to the element. The [official specification](https://graphql.github.io/graphql-spec/October2021) does not describe such a possibility,
 although [discussions](https://github.com/graphql/graphql-spec/issues/300) are underway to expand the specification to add this feature.
 [graphql-sdl-exporter](https://github.com/sungam3r/graphql-sdl-exporter/tree/master/samples) can get information about directives if the server
-[supports](https://github.com/sungam3r/graphql-introspection-model/blob/master/src/GraphQL.IntrospectionModel/IntrospectionQuery.cs#L102) this feature.
+supports this feature.

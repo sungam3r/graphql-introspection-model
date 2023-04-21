@@ -6,4 +6,8 @@
     <Description>Types for GraphQL introspection model and building SDL</Description>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="GraphQL-Parser" Version="9.0.2" />
+  </ItemGroup>
+
 </Project>

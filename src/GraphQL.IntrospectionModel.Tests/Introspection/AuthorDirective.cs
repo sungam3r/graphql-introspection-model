@@ -3,7 +3,7 @@ using GraphQLParser.AST;
 
 namespace GraphQL.IntrospectionModel.Tests.Introspection;
 
-internal class AuthorDirective : Directive
+internal sealed class AuthorDirective : Directive
 {
     public AuthorDirective()
         : base("author", DirectiveLocation.FieldDefinition, DirectiveLocation.Object)

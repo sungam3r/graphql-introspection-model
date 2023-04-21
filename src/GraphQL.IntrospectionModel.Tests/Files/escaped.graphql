@@ -1,4 +1,4 @@
-# Description that should be escaped: \", \\, \b, \f, \t
+"Description that should be escaped: \", \\, \b, \f, \n, \r, \t"
 schema {
   query: Query
 }

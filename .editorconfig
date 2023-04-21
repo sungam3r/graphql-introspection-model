@@ -26,7 +26,7 @@ indent_style = space
 indent_size = 2
 trim_trailing_whitespace = true
 
-[*.json]
+[*.{json,graphql}]
 insert_final_newline = false
 
 [*.cs]

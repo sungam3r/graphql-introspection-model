@@ -14,8 +14,12 @@ public class SDLBuilderTests
     {
         string introspection = ReadFile("test1.json");
         var schemaElement = JsonDocument.Parse(introspection).RootElement.GetProperty("__schema");
-        var schema = JsonSerializer.Deserialize<GraphQLSchema>(schemaElement, new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } });
-        string sdl = SDLBuilder.Build(schema!);
+        var schema = JsonSerializer.Deserialize<GraphQLSchema>(schemaElement, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            Converters = { new JsonStringEnumConverter() }
+        });
+        string sdl = schema!.Print(new ASTConverterOptions { EachDirectiveLocationOnNewLine = true });
         sdl.ShouldBe(ReadFile("test1.graphql"));
     }
 
@@ -65,7 +69,7 @@ public class SDLBuilderTests
             }
         };
 
-        string sdl = SDLBuilder.Build(schema);
+        string sdl = schema.Print();
 
         sdl.ShouldBe(ReadFile("person.graphql"));
     }
@@ -118,7 +122,7 @@ public class SDLBuilderTests
             }
         };
 
-        string sdl = SDLBuilder.Build(schema);
+        string sdl = schema.Print();
 
         sdl.ShouldBe(ReadFile("interfaces.graphql"));
     }
@@ -227,7 +231,7 @@ public class SDLBuilderTests
             }
         };
 
-        string sdl = SDLBuilder.Build(schema);
+        string sdl = schema.Print();
 
         sdl.ShouldBe(ReadFile("deprecations.graphql"));
     }
@@ -259,7 +263,7 @@ public class SDLBuilderTests
             }
         };
 
-        string sdl = SDLBuilder.Build(schema, new SDLBuilderOptions { TypeComparer = null });
+        string sdl = schema.Print(new ASTConverterOptions { TypeComparer = null });
 
         sdl.ShouldBe(ReadFile("scalars.graphql"));
     }
@@ -288,7 +292,7 @@ public class SDLBuilderTests
                     Name = "my",
                     Locations = new List<GraphQLDirectiveLocation>
                     {
-                        GraphQLDirectiveLocation.Query
+                        GraphQLDirectiveLocation.QUERY
                     }
                 },
                 new GraphQLDirective
@@ -297,7 +301,7 @@ public class SDLBuilderTests
                     IsRepeatable = true,
                     Locations = new List<GraphQLDirectiveLocation>
                     {
-                        GraphQLDirectiveLocation.Enum
+                        GraphQLDirectiveLocation.ENUM
                     }
                 },
                 new GraphQLDirective
@@ -305,7 +309,7 @@ public class SDLBuilderTests
                     Name = "my_with_args",
                     Locations = new List<GraphQLDirectiveLocation>
                     {
-                        GraphQLDirectiveLocation.Query
+                        GraphQLDirectiveLocation.QUERY
                     },
                     Args = new List<GraphQLArgument>
                     {
@@ -325,7 +329,7 @@ public class SDLBuilderTests
                     IsRepeatable = true,
                     Locations = new List<GraphQLDirectiveLocation>
                     {
-                        GraphQLDirectiveLocation.Enum
+                        GraphQLDirectiveLocation.ENUM
                     },
                     Args = new List<GraphQLArgument>
                     {
@@ -342,7 +346,11 @@ public class SDLBuilderTests
             }
         };
 
-        string sdl = SDLBuilder.Build(schema, new SDLBuilderOptions { DirectiveComparer = null });
+        string sdl = schema.Print(new ASTConverterOptions
+        {
+            EachDirectiveLocationOnNewLine = true,
+            DirectiveComparer = null,
+        });
 
         sdl.ShouldBe(ReadFile("directives.graphql"));
     }
@@ -368,7 +376,7 @@ public class SDLBuilderTests
                         {
                             Name = "GREEN",
                             IsDeprecated = true,
-                            DeprecationReason = "Use RED"
+                            DeprecationReason = "Use RED",
                         },
                         new GraphQLEnumValue
                         {
@@ -409,10 +417,10 @@ public class SDLBuilderTests
             }
         };
 
-        string sdl1 = SDLBuilder.Build(schema);
+        string sdl1 = schema.Print();
         sdl1.ShouldBe(ReadFile("enums.graphql"));
 
-        string sdl2 = SDLBuilder.Build(schema, new SDLBuilderOptions { AppliedDirectives = false });
+        string sdl2 = schema.Print(new ASTConverterOptions { PrintAppliedDirectives = false });
         sdl2.ShouldBe(ReadFile("enums_without_directives.graphql"));
     }
 
@@ -421,18 +429,18 @@ public class SDLBuilderTests
     {
         var schema = new GraphQLSchema
         {
-            Description = "Description that should be escaped: \", \\, \b, \f, \t",
+            Description = "Description that should be escaped: \", \\, \b, \f, \n, \r, \t",
             QueryType = new GraphQLRequestType
             {
                 Name = "Query",
             },
         };
 
-        string sdl = SDLBuilder.Build(schema);
+        string sdl = schema.Print();
 
         sdl.ShouldBe(ReadFile("escaped.graphql"));
     }
 
     private static string ReadFile(string fileName)
-        => File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Files", fileName));
+        => File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Files", fileName));
 }

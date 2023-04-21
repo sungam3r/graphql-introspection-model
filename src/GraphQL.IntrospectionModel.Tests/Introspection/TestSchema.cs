@@ -2,7 +2,7 @@ using GraphQL.Types;
 
 namespace GraphQL.IntrospectionModel.Tests.Introspection;
 
-internal class TestSchema : Schema
+internal sealed class TestSchema : Schema
 {
     public TestSchema(IServiceProvider provider) : base(provider)
     {

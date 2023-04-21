@@ -2,7 +2,7 @@ using GraphQL.Types;
 
 namespace GraphQL.IntrospectionModel.Tests.Introspection;
 
-internal class Mutation : ObjectGraphType
+internal sealed class Mutation : ObjectGraphType
 {
     public Mutation()
     {
@@ -18,7 +18,7 @@ internal class Mutation : ObjectGraphType
     }
 }
 
-internal class PersonGraphType : InputObjectGraphType<Person>
+internal sealed class PersonGraphType : InputObjectGraphType<Person>
 {
     public PersonGraphType()
     {
@@ -30,7 +30,7 @@ internal class PersonGraphType : InputObjectGraphType<Person>
     }
 }
 
-internal class Person
+internal sealed class Person
 {
     public string? Name { get; set; }
 

@@ -1,17 +1,17 @@
-# Author's name
-directive @author(name: String!) on
-  | FIELD_DEFINITION
-  | OBJECT
-
-# Reverts field value
-directive @revert on
-  | FIELD_DEFINITION
-
 schema {
   query: Query
   mutation: Mutation
   subscription: Subscription
 }
+
+"Author's name"
+directive @author(name: String!) on
+  | FIELD_DEFINITION
+  | OBJECT
+
+"Reverts field value"
+directive @revert on
+  | FIELD_DEFINITION
 
 type Cat {
   nickname: String
@@ -28,10 +28,7 @@ type Dog {
 }
 
 type Mutation {
-  print(
-    person: Person
-    format: String @deprecated(reason: "Unused argument")
-  ): Boolean
+  print(person: Person, format: String @deprecated(reason: "Unused argument")): Boolean
 }
 
 input Person {

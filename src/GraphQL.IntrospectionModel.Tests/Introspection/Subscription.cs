@@ -2,7 +2,7 @@ using GraphQL.Types;
 
 namespace GraphQL.IntrospectionModel.Tests.Introspection;
 
-internal class Subscription : ObjectGraphType
+internal sealed class Subscription : ObjectGraphType
 {
     public Subscription()
     {
