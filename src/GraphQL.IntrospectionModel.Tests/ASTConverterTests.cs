@@ -18,13 +18,12 @@ public class ASTConverterTests
     public void Should_Build_Schema_From_Introspection_Response()
     {
         string introspection = ReadFile("test1.json");
-        var schemaElement = JsonDocument.Parse(introspection).RootElement.GetProperty("__schema");
-        var schema = JsonSerializer.Deserialize<GraphQLSchema>(schemaElement, new JsonSerializerOptions
+        var response = JsonSerializer.Deserialize<GraphQLResponse>(introspection, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             Converters = { new JsonStringEnumConverter() }
         });
-        string sdl = schema!.Print(new ASTConverterOptions { EachDirectiveLocationOnNewLine = true });
+        string sdl = response.ShouldNotBeNull().Data.ShouldNotBeNull().__Schema.ShouldNotBeNull().Print(new ASTConverterOptions { EachDirectiveLocationOnNewLine = true });
         sdl.ShouldBe(ReadFile("test1.graphql"));
     }
 

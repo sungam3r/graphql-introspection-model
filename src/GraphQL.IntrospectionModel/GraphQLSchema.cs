@@ -1,6 +1,6 @@
 namespace GraphQL.IntrospectionModel;
 
-/// <summary> Model for GraphQL schema obtained by introspection request. </summary>
+/// <summary> GraphQL schema. </summary>
 public sealed class GraphQLSchema : IHasDescription, IHasDirectives
 {
     /// <summary> Gets or sets the schema description. </summary>
