@@ -17,7 +17,14 @@ public sealed class IntrospectionTests : IClassFixture<GraphQLFixture>
     private static string ReadFile(string fileName)
         => File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Files", "Introspection", fileName));
 
-    private async Task ShouldMatchAsync(string query, string expected, Action<ExecutionResult>? action = null)
+    private async Task ShouldMatchAsync(string query, string expected)
+    {
+        var response = await GetResponseAsync(query);
+        string sdl = response.Data.ShouldNotBeNull().__Schema.ShouldNotBeNull().Print(new ASTConverterOptions { EachDirectiveLocationOnNewLine = true });
+        sdl.ShouldBe(expected);
+    }
+
+    private async Task<GraphQLResponse> GetResponseAsync(string query)
     {
         var executor = _fixture.Provider.GetRequiredService<IDocumentExecuter<TestSchema>>();
         await using var scope = _fixture.Provider.CreateAsyncScope();
@@ -27,21 +34,14 @@ public sealed class IntrospectionTests : IClassFixture<GraphQLFixture>
             opt.RequestServices = scope.ServiceProvider;
         });
 
-        action?.Invoke(result);
-
-        if (result.Errors != null)
-            throw new InvalidOperationException(string.Join(Environment.NewLine, result.Errors.Select(e => e.Message + " " + e.InnerException?.Message)));
-
         var serializer = scope.ServiceProvider.GetRequiredService<IGraphQLTextSerializer>();
 
         var actual = serializer.Serialize(result);
-        var response = JsonSerializer.Deserialize<GraphQLResponse>(actual, new JsonSerializerOptions
+        return JsonSerializer.Deserialize<GraphQLResponse>(actual, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             Converters = { new JsonStringEnumConverter() }
-        });
-        string sdl = response.ShouldNotBeNull().Data.ShouldNotBeNull().__Schema.ShouldNotBeNull().Print(new ASTConverterOptions { EachDirectiveLocationOnNewLine = true });
-        sdl.ShouldBe(expected);
+        }).ShouldNotBeNull();
     }
 
     [Fact]
@@ -71,10 +71,9 @@ public sealed class IntrospectionTests : IClassFixture<GraphQLFixture>
     [Fact]
     public async Task Wrong_Query_Should_Return_Errors()
     {
-        await Should.ThrowAsync<InvalidOperationException>(() => ShouldMatchAsync("query q { qqq }", "-", result =>
-        {
-            result.Errors.ShouldNotBeNull().Count.ShouldBe(1);
-            result.Errors[0].Message.ShouldBe("Cannot query field 'qqq' on type 'Query'.");
-        }));
+        var response = await GetResponseAsync("query q { qqq }");
+        response.Data.ShouldBeNull();
+        response.Errors.ShouldNotBeNull().Length.ShouldBe(1);
+        response.Errors[0].Message.ShouldBe("Cannot query field 'qqq' on type 'Query'.");
     }
 }
