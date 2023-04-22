@@ -123,8 +123,8 @@ fragment TypeRef on __Type {
 ```
 
 The result of this query (like all other GraphQL queries) is JSON. You can deal with it directly or deserialize it into some data structures.
-Such data structures are provided by this repository. The top level type is [`GraphQLSchema`](src/GraphQL.IntrospectionModel/GraphQLSchema.cs).
-After deserialization JSON into the `GraphQLSchema` (or after creating `GraphQLSchema` in any other way), it can be transformed into AST
+Such data structures are provided by this repository. The top level type is [`GraphQLResponse`](src/GraphQL.IntrospectionModel/GraphQLResponse.cs).
+After deserialization JSON into the `GraphQLResponse` (or after creating `GraphQLSchema` in any other way), it can be transformed into AST
 representation and then printed by `SDLPrinter` from [GraphQL-Parser](https://github.com/graphql-dotnet/parser) nuget package.
 
 #### Example of deserializing introspection response
@@ -163,3 +163,22 @@ about the directives applied to the element. The [official specification](https:
 although [discussions](https://github.com/graphql/graphql-spec/issues/300) are underway to expand the specification to add this feature.
 [graphql-sdl-exporter](https://github.com/sungam3r/graphql-sdl-exporter/tree/master/samples) can get information about directives if the server
 supports this feature.
+
+#### Variations of introspection query
+
+This repo provides 4 variations of [introspection query](src/GraphQL.IntrospectionModel/IntrospectionQuery.cs):
+
+1. **Classic** - "classic" introspection query provided above (without exposing applied directives).
+It conforms to the latest release version of the spec.
+
+2) **ClassicDraft** - the same as "classic" + deprecations for input values.
+See [PR](https://github.com/graphql/graphql-spec/pull/805) for more info. It conforms to the prerelease
+(working draft) version of the spec.
+
+3) **Modern** - modified "classic" introspection query, in which the directives applied to the schema
+elements are exposed. It requires GraphQL server to support this feature.
+See [GraphQL.NET](https://graphql-dotnet.github.io/docs/getting-started/directives/#directives-and-introspection)
+as an example of such a server.
+
+4) **ModernDraft** - the same as "modern" + deprecations for input values. This is the most advanced
+query among all available.

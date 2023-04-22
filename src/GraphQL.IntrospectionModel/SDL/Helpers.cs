@@ -71,7 +71,7 @@ public static class Helpers
     }
 
     /// <summary>
-    /// Prints the SDL schema using the GraphQL schema from introspection request using the specified options.
+    /// Prints SDL from <see cref="GraphQLSchema"/> using the specified options.
     /// </summary>
     public static string Print(this GraphQLSchema schema, ASTConverterOptions? options = null)
     {

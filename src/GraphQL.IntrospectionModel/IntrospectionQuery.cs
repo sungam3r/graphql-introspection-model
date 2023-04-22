@@ -1,9 +1,9 @@
 namespace GraphQL.IntrospectionModel;
 
-/// <summary> Query text for introspection request. See https://graphql.github.io/graphql-spec/October2021/#sec-Introspection </summary>
+/// <summary> Variations of introspection queries. See https://graphql.github.io/graphql-spec/October2021/#sec-Introspection </summary>
 public static class IntrospectionQuery
 {
-    /// <summary> The text of the "classic" introspection request - without exposing directives. </summary>
+    /// <summary> The text of the "classic" introspection query - without exposing directives. </summary>
     public static readonly string Classic = @"
   query IntrospectionQuery {
     __schema {
@@ -99,7 +99,7 @@ public static class IntrospectionQuery
   }
 ";
 
-    /// <summary> The text of the "classic" introspection request - without exposing directives. </summary>
+    /// <summary> The text of the "classic" introspection query - without exposing directives. </summary>
     /// <remarks> Includes changes from https://github.com/graphql/graphql-spec/pull/805 </remarks>
     public static readonly string ClassicDraft = @"
   query IntrospectionQuery {
@@ -198,7 +198,7 @@ public static class IntrospectionQuery
   }
 ";
 
-    /// <summary> The text of the modified introspection request, in which the directives applied to the schema elements are exposed. </summary>
+    /// <summary> The text of the modified introspection query, in which the directives applied to the schema elements are exposed. </summary>
     public static readonly string Modern = @"
   query IntrospectionQuery {
     __schema {
@@ -306,7 +306,7 @@ public static class IntrospectionQuery
   }
 ";
 
-    /// <summary> The text of the modified introspection request, in which the directives applied to the schema elements are exposed. </summary>
+    /// <summary> The text of the modified introspection query, in which the directives applied to the schema elements are exposed. </summary>
     /// <remarks> Includes changes from https://github.com/graphql/graphql-spec/pull/805 </remarks>
     public static readonly string ModernDraft = @"
   query IntrospectionQuery {

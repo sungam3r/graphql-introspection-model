@@ -1,7 +1,7 @@
 namespace GraphQL.IntrospectionModel;
 
 /// <summary>
-/// The root object obtained by introspection request.
+/// The root object obtained from GraphQL server.
 /// </summary>
 public class GraphQLResponse
 {
@@ -17,7 +17,7 @@ public class GraphQLResponse
 }
 
 /// <summary>
-/// Container for normal response.
+/// Container for data.
 /// </summary>
 public class GraphQLData
 {
