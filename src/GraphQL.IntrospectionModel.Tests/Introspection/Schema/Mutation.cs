@@ -1,6 +1,6 @@
 using GraphQL.Types;
 
-namespace GraphQL.IntrospectionModel.Tests.Introspection;
+namespace GraphQL.IntrospectionModel.Tests;
 
 internal sealed class Mutation : ObjectGraphType
 {

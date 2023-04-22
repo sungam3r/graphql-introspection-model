@@ -10,6 +10,7 @@ public sealed class ASTConverterOptions : SDLPrinterOptions
     /// <summary>
     /// Gets or sets a value indicating whether to output applied directives in the generated SDL.
     /// @deprecated directive (if any) is always printed regardless of the value of this property.
+    /// By default <see langword="true"/>.
     /// </summary>
     public bool PrintAppliedDirectives { get; set; } = true;
 

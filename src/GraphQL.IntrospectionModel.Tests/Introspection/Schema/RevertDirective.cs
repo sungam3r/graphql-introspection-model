@@ -1,7 +1,7 @@
 using GraphQL.Types;
 using GraphQLParser.AST;
 
-namespace GraphQL.IntrospectionModel.Tests.Introspection;
+namespace GraphQL.IntrospectionModel.Tests;
 
 internal sealed class RevertDirective : Directive
 {

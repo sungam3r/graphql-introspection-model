@@ -3,45 +3,36 @@ using System.Text.Json.Serialization;
 using GraphQL.IntrospectionModel.SDL;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GraphQL.IntrospectionModel.Tests.Introspection;
+namespace GraphQL.IntrospectionModel.Tests;
 
-public sealed class IntegrationTest : IDisposable
+public sealed class IntrospectionTests : IClassFixture<GraphQLFixture>
 {
-    private readonly ServiceProvider _provider;
+    private readonly GraphQLFixture _fixture;
 
-    public IntegrationTest()
+    public IntrospectionTests(GraphQLFixture fixture)
     {
-        var services = new ServiceCollection()
-            .AddGraphQL(builder => builder
-                .AddSchema<TestSchema>()
-                .AddSystemTextJson(opt => opt.WriteIndented = true)
-                .AddGraphTypes());
-
-        _provider = services.BuildServiceProvider();
-    }
-
-    public void Dispose()
-    {
-        _provider.Dispose();
+        _fixture = fixture;
     }
 
     private static string ReadFile(string fileName)
         => File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Files", "Introspection", fileName));
 
-    private async Task ShouldMatchAsync(string query, string expected)
+    private async Task ShouldMatchAsync(string query, string expected, Action<ExecutionResult>? action = null)
     {
-        var executor = _provider.GetRequiredService<IDocumentExecuter<TestSchema>>();
-        using var scope = _provider.CreateScope();
+        var executor = _fixture.Provider.GetRequiredService<IDocumentExecuter<TestSchema>>();
+        await using var scope = _fixture.Provider.CreateAsyncScope();
         var result = await executor.ExecuteAsync(opt =>
         {
             opt.Query = query;
             opt.RequestServices = scope.ServiceProvider;
         });
 
+        action?.Invoke(result);
+
         if (result.Errors != null)
             throw new InvalidOperationException(string.Join(Environment.NewLine, result.Errors.Select(e => e.Message + " " + e.InnerException?.Message)));
 
-        var serializer = _provider.GetRequiredService<IGraphQLTextSerializer>();
+        var serializer = scope.ServiceProvider.GetRequiredService<IGraphQLTextSerializer>();
 
         var actual = serializer.Serialize(result);
         var response = JsonSerializer.Deserialize<GraphQLResponse>(actual, new JsonSerializerOptions
@@ -75,5 +66,15 @@ public sealed class IntegrationTest : IDisposable
     public async Task ModernDraft()
     {
         await ShouldMatchAsync(IntrospectionQuery.ModernDraft, ReadFile("modern_draft.graphql"));
+    }
+
+    [Fact]
+    public async Task Wrong_Query_Should_Return_Errors()
+    {
+        await Should.ThrowAsync<InvalidOperationException>(() => ShouldMatchAsync("query q { qqq }", "-", result =>
+        {
+            result.Errors.ShouldNotBeNull().Count.ShouldBe(1);
+            result.Errors[0].Message.ShouldBe("Cannot query field 'qqq' on type 'Query'.");
+        }));
     }
 }

@@ -361,19 +361,90 @@ public class ASTConverterTests
     {
         var schema = new GraphQLSchema
         {
-            QueryType = new GraphQLRequestType
-            {
-                Name = "Query"
-            }
         };
 
         // also tests parameterless ctor
         var document = new ASTConverter().ToDocument(schema);
         string sdl = new SDLPrinter().Print(document);
 
+        sdl.ShouldBe("");
+    }
+
+    [Fact]
+    public void Should_Build_Empty_Schema_When_PrintAppliedDirectives_False()
+    {
+        var schema = new GraphQLSchema
+        {
+            AppliedDirectives = new List<GraphQLAppliedDirective>
+            {
+                new GraphQLAppliedDirective
+                {
+                    Name = "my"
+                }
+            }
+        };
+
+        string sdl = schema.Print(new ASTConverterOptions { PrintAppliedDirectives = false });
+
+        sdl.ShouldBe("");
+    }
+
+    [Fact]
+    public void Should_Build_Schema_With_QueryType()
+    {
+        var schema = new GraphQLSchema
+        {
+            QueryType = new GraphQLRequestType
+            {
+                Name = "MyQuery"
+            }
+        };
+
+        string sdl = schema.Print();
+
         sdl.ShouldBe("""
             schema {
-              query: Query
+              query: MyQuery
+            }
+            """);
+    }
+
+    [Fact]
+    public void Should_Build_Schema_With_MutationType()
+    {
+        var schema = new GraphQLSchema
+        {
+            MutationType = new GraphQLRequestType
+            {
+                Name = "MyMutation"
+            }
+        };
+
+        string sdl = schema.Print();
+
+        sdl.ShouldBe("""
+            schema {
+              mutation: MyMutation
+            }
+            """);
+    }
+
+    [Fact]
+    public void Should_Build_Schema_With_SubscriptionType()
+    {
+        var schema = new GraphQLSchema
+        {
+            SubscriptionType = new GraphQLRequestType
+            {
+                Name = "MySubscription"
+            }
+        };
+
+        string sdl = schema.Print();
+
+        sdl.ShouldBe("""
+            schema {
+              subscription: MySubscription
             }
             """);
     }
@@ -445,6 +516,69 @@ public class ASTConverterTests
 
         string sdl2 = schema.Print(new ASTConverterOptions { PrintAppliedDirectives = false });
         sdl2.ShouldBe(ReadFile("enums_without_directives.graphql"));
+    }
+
+    [Fact]
+    public void Should_Build_Empty_Enum()
+    {
+        var schema = new GraphQLSchema
+        {
+            Types = new List<GraphQLType>
+            {
+                new GraphQLType
+                {
+                    Kind = GraphQLTypeKind.ENUM,
+                    Name = "Color",
+                }
+            }
+        };
+
+        string sdl1 = schema.Print();
+        sdl1.ShouldBe("""
+            enum Color
+            """);
+    }
+
+    [Fact]
+    public void Should_Build_Empty_Union()
+    {
+        var schema = new GraphQLSchema
+        {
+            Types = new List<GraphQLType>
+            {
+                new GraphQLType
+                {
+                    Kind = GraphQLTypeKind.UNION,
+                    Name = "Reason",
+                }
+            }
+        };
+
+        string sdl1 = schema.Print();
+        sdl1.ShouldBe("""
+            union Reason
+            """);
+    }
+
+    [Fact]
+    public void Should_Build_Empty_Input()
+    {
+        var schema = new GraphQLSchema
+        {
+            Types = new List<GraphQLType>
+            {
+                new GraphQLType
+                {
+                    Kind = GraphQLTypeKind.INPUT_OBJECT,
+                    Name = "Person",
+                }
+            }
+        };
+
+        string sdl1 = schema.Print();
+        sdl1.ShouldBe("""
+            input Person
+            """);
     }
 
     [Fact]
