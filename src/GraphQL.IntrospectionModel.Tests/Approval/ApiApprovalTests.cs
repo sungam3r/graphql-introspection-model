@@ -9,13 +9,13 @@ public class ApiApprovalTests
     /// <param name="type"> The type used as a marker for the assembly whose public API change you want to check. </param>
     [Theory]
     [InlineData(typeof(GraphQLField))]
-    public void PublicApi(Type type)
+    public void Public_Api_Should_Not_Change_Unexpectedly(Type type)
     {
         string publicApi = type.Assembly.GeneratePublicApi(new()
         {
             IncludeAssemblyAttributes = false,
-            AllowNamespacePrefixes = new[] { "Microsoft.Extensions.DependencyInjection" },
-            ExcludeAttributes = new[] { "System.Diagnostics.DebuggerDisplayAttribute" },
+            AllowNamespacePrefixes = ["Microsoft.Extensions.DependencyInjection"],
+            ExcludeAttributes = ["System.Diagnostics.DebuggerDisplayAttribute"],
         });
 
         publicApi.ShouldMatchApproved(options => options!.WithFilenameGenerator((testMethodInfo, discriminator, fileType, fileExtension) => $"{type.Assembly.GetName().Name!}.{fileType}.{fileExtension}"));

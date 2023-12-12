@@ -8,6 +8,11 @@ namespace GraphQL.IntrospectionModel.Tests;
 public sealed class IntrospectionTests : IClassFixture<GraphQLFixture>
 {
     private readonly GraphQLFixture _fixture;
+    private static readonly JsonSerializerOptions _options = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        Converters = { new JsonStringEnumConverter() }
+    };
 
     public IntrospectionTests(GraphQLFixture fixture)
     {
@@ -37,11 +42,7 @@ public sealed class IntrospectionTests : IClassFixture<GraphQLFixture>
         var serializer = scope.ServiceProvider.GetRequiredService<IGraphQLTextSerializer>();
 
         var actual = serializer.Serialize(result);
-        return JsonSerializer.Deserialize<GraphQLResponse>(actual, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-            Converters = { new JsonStringEnumConverter() }
-        }).ShouldNotBeNull();
+        return JsonSerializer.Deserialize<GraphQLResponse>(actual, _options).ShouldNotBeNull();
     }
 
     [Fact]
