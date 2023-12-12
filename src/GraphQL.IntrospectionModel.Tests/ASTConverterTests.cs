@@ -15,6 +15,7 @@ public class ASTConverterTests
     }
 
     [Fact]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1869:Cache and reuse 'JsonSerializerOptions' instances", Justification = "Test")]
     public void Should_Build_Schema_From_Introspection_Response()
     {
         string introspection = ReadFile("test1.json");
