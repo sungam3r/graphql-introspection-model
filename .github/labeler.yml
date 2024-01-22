@@ -1,17 +1,27 @@
 SDL:
-  - src/GraphQL.IntrospectionModel/SDL/*
+- changed-files:
+  - any-glob-to-any-file:
+    - src/GraphQL.IntrospectionModel/SDL/*
 
 tests:
-  - src/GraphQL.IntrospectionModel.Tests/**/*
+- changed-files:
+  - any-glob-to-any-file:
+    - src/GraphQL.IntrospectionModel.Tests/**/*
 
 CI:
-  - .github/workflows/**/*
-  - .github/dependabot.yml
-  - .github/labeler.yml
-  - .github/codecov.yml
+- changed-files:
+  - any-glob-to-any-file:
+    - .github/workflows/**/*
+    - .github/dependabot.yml
+    - .github/labeler.yml
+    - .github/codecov.yml
 
 code style:
-  - .editorconfig
+- changed-files:
+  - any-glob-to-any-file:
+    - .editorconfig
 
 documentation:
-  - README.md
+- changed-files:
+  - any-glob-to-any-file:
+    - README.md
