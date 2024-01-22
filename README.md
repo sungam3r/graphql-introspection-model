@@ -4,7 +4,7 @@
 
 ![License](https://img.shields.io/github/license/sungam3r/graphql-introspection-model)
 
-[![codecov](https://codecov.io/gh/sungam3r/graphql-introspection-model/branch/master/graph/badge.svg?token=I98DQMW5EJ)](https://codecov.io/gh/sungam3r/graphql-introspection-model)
+[![codecov](https://codecov.io/gh/sungam3r/graphql-introspection-model/graph/badge.svg?token=I98DQMW5EJ)](https://codecov.io/gh/sungam3r/graphql-introspection-model)
 [![Nuget](https://img.shields.io/nuget/dt/GraphQL.IntrospectionModel)](https://www.nuget.org/packages/GraphQL.IntrospectionModel)
 [![NuGet](https://img.shields.io/nuget/v/GraphQL.IntrospectionModel)](https://www.nuget.org/packages/GraphQL.IntrospectionModel)
 
