@@ -4,9 +4,13 @@ namespace GraphQL.IntrospectionModel.Tests;
 
 internal sealed class Subscription : ObjectGraphType
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments", Justification = "Test")]
     public Subscription()
     {
-        Field<ListGraphType<IntGraphType>>("values").Resolve(_ => new[] { 1, 2 });
+        Field<ListGraphType<IntGraphType>>("values").ResolveStream(_ => new StubObservable());
+    }
+
+    internal sealed class StubObservable : IObservable<object?>
+    {
+        public IDisposable Subscribe(IObserver<object?> observer) => throw new NotSupportedException();
     }
 }
