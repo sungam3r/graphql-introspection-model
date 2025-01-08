@@ -8,14 +8,14 @@ namespace GraphQL.IntrospectionModel.SDL;
 /// </summary>
 public partial class ASTConverter
 {
-    private static readonly List<string> _builtInScalars = new()
-    {
+    private static readonly List<string> _builtInScalars =
+    [
         "String",
         "Boolean",
         "Int",
         "Float",
         "ID"
-    };
+    ];
 
     private readonly ASTConverterOptions _options;
 

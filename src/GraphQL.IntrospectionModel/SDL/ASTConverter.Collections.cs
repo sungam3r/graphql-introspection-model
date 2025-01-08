@@ -11,7 +11,7 @@ public partial class ASTConverter
     {
         if (values?.Count > 0)
         {
-            var definitions = new GraphQLEnumValuesDefinition(new());
+            var definitions = new GraphQLEnumValuesDefinition([]);
             foreach (var value in values)
                 definitions.Items.AddIfNotNull(ToEnumValueDefinition(value));
 
@@ -28,7 +28,7 @@ public partial class ASTConverter
     {
         if (types?.Count > 0)
         {
-            var memberTypes = new GraphQLUnionMemberTypes(new());
+            var memberTypes = new GraphQLUnionMemberTypes([]);
             foreach (var type in types)
                 memberTypes.Items.AddIfNotNull((GraphQLNamedType)ToType(type));
 
@@ -45,7 +45,7 @@ public partial class ASTConverter
     {
         if (types?.Count > 0)
         {
-            var interfaces = new GraphQLImplementsInterfaces(new());
+            var interfaces = new GraphQLImplementsInterfaces([]);
             foreach (var type in types)
                 interfaces.Items.AddIfNotNull((GraphQLNamedType)ToType(type));
 
@@ -62,7 +62,7 @@ public partial class ASTConverter
     {
         if (fields?.Count > 0)
         {
-            var definitions = new GraphQLFieldsDefinition(new());
+            var definitions = new GraphQLFieldsDefinition([]);
             foreach (var field in fields)
                 definitions.Items.AddIfNotNull(ToFieldDefinition(field));
 
@@ -79,7 +79,7 @@ public partial class ASTConverter
     {
         if (fields?.Count > 0)
         {
-            var definitions = new GraphQLInputFieldsDefinition(new());
+            var definitions = new GraphQLInputFieldsDefinition([]);
             foreach (var field in fields)
                 definitions.Items.Add(ToInputValueDefinition(field));
 
@@ -96,7 +96,7 @@ public partial class ASTConverter
     {
         if (arguments?.Count > 0)
         {
-            var definitions = new GraphQLArgumentsDefinition(new());
+            var definitions = new GraphQLArgumentsDefinition([]);
             foreach (var argument in arguments)
                 definitions.Items.Add(ToInputValueDefinition(argument));
 
@@ -117,7 +117,7 @@ public partial class ASTConverter
         {
             if (_options.PrintAppliedDirectives)
             {
-                var directives = new GraphQLDirectives(new());
+                var directives = new GraphQLDirectives([]);
                 foreach (var applied in element.AppliedDirectives)
                     directives.Items.AddIfNotNull(ToDirective(applied));
 
@@ -127,19 +127,19 @@ public partial class ASTConverter
         // else fall back to manually create AppliedDirectives from single @deprecated if exists
         else if (element is IDeprecatable deprecatable && deprecatable.DeprecationReason != null)
         {
-            var directives = new GraphQLDirectives(new());
+            var directives = new GraphQLDirectives([]);
             directives.Items.AddIfNotNull(ToDirective(new GraphQLAppliedDirective
             {
                 Name = "deprecated",
-                Args = new List<GraphQLDirectiveArgument>
-                {
+                Args =
+                [
                     new GraphQLDirectiveArgument
                     {
                         Name = "reason",
                         // need to escape because later will call ToValue
                         Value = Helpers.BuildEscapedString(deprecatable.DeprecationReason),
                     },
-                },
+                ],
             }));
             return directives;
         }
@@ -154,7 +154,7 @@ public partial class ASTConverter
     {
         if (arguments?.Count > 0)
         {
-            var args = new GraphQLArguments(new());
+            var args = new GraphQLArguments([]);
             foreach (var argument in arguments)
                 args.Items.AddIfNotNull(ToArgument(argument));
 
@@ -169,7 +169,7 @@ public partial class ASTConverter
     /// </summary>
     public virtual GraphQLDirectiveLocations ToDirectiveLocations(ICollection<GraphQLDirectiveLocation>? locations)
     {
-        var directiveLocations = new GraphQLDirectiveLocations(new());
+        var directiveLocations = new GraphQLDirectiveLocations([]);
         if (locations != null)
         {
             foreach (var location in locations)
