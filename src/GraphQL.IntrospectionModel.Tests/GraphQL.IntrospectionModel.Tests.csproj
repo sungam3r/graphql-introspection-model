@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <NoWarn>$(NoWarn);1591;CA1707;IDE1006</NoWarn>
   </PropertyGroup>
 

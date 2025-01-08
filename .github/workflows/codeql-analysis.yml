@@ -4,9 +4,11 @@ name: CodeQL analysis
 
 on:
   push:
-    branches: [master, develop]
+    branches:
+      - master
   pull_request:
-    branches: [master, develop]
+    branches:
+      - master
 
 jobs:
   analyze:
@@ -21,7 +23,7 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-         dotnet-version: 8.0.x
+         dotnet-version: 9.0.x
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
