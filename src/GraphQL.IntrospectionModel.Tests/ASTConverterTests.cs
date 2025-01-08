@@ -37,13 +37,13 @@ public class ASTConverterTests
             {
                 Name = "Person"
             },
-            Types = new List<GraphQLType>
-            {
+            Types =
+            [
                 new GraphQLType
                 {
                     Name = "Person",
-                    Fields = new List<GraphQLField>
-                    {
+                    Fields =
+                    [
                         new GraphQLField
                         {
                             Name = "Age",
@@ -66,9 +66,9 @@ public class ASTConverterTests
                                 Name = "String"
                             }
                         }
-                    }
+                    ]
                 }
-            }
+            ]
         };
 
         string sdl = schema.Print();
@@ -85,8 +85,8 @@ public class ASTConverterTests
             {
                 Name = "Person"
             },
-            Types = new List<GraphQLType>
-            {
+            Types =
+            [
                 new GraphQLType
                 {
                     Name = "IPerson1",
@@ -105,8 +105,8 @@ public class ASTConverterTests
                 new GraphQLType
                 {
                     Name = "Person",
-                    Interfaces = new List<GraphQLFieldType>
-                    {
+                    Interfaces =
+                    [
                         new GraphQLFieldType
                         {
                             Name = "IPerson1"
@@ -119,9 +119,9 @@ public class ASTConverterTests
                         {
                             Name = "IPerson3"
                         },
-                    }
+                    ]
                 }
-            }
+            ]
         };
 
         string sdl = schema.Print();
@@ -135,14 +135,14 @@ public class ASTConverterTests
     {
         var schema = new GraphQLSchema
         {
-            Types = new List<GraphQLType>
-            {
+            Types =
+            [
                 new GraphQLType
                 {
                     Name = "Query",
                     Kind = GraphQLTypeKind.OBJECT,
-                    Fields = new List<GraphQLField>
-                    {
+                    Fields =
+                    [
                         new GraphQLField
                         {
                             Name = "persons",
@@ -154,8 +154,8 @@ public class ASTConverterTests
                                     Name = "Person"
                                 }
                             },
-                            Args = new List<GraphQLArgument>
-                            {
+                            Args =
+                            [
                                 new GraphQLArgument
                                 {
                                     Name = "filter",
@@ -163,32 +163,32 @@ public class ASTConverterTests
                                     {
                                         Name = "PersonFilter",
                                     },
-                                    AppliedDirectives = new List<GraphQLAppliedDirective>
-                                    {
+                                    AppliedDirectives =
+                                    [
                                         new GraphQLAppliedDirective
                                         {
                                             Name = "deprecated",
-                                            Args = new List<GraphQLDirectiveArgument>
-                                            {
+                                            Args =
+                                            [
                                                 new GraphQLDirectiveArgument
                                                 {
                                                     Name = "reason",
                                                     Value = "\"Do not use this arg\""
                                                 }
-                                            }
+                                            ]
                                         }
-                                    }
+                                    ]
                                 }
-                            }
+                            ]
                         }
-                    }
+                    ]
                 },
                 new GraphQLType
                 {
                     Name = "PersonFilter",
                     Kind = GraphQLTypeKind.INPUT_OBJECT,
-                    InputFields = new List<GraphQLInputField>
-                    {
+                    InputFields =
+                    [
                         new GraphQLInputField
                         {
                             Name = "namePattern",
@@ -196,30 +196,30 @@ public class ASTConverterTests
                             {
                                 Name = "String"
                             },
-                            AppliedDirectives = new List<GraphQLAppliedDirective>
-                            {
+                            AppliedDirectives =
+                            [
                                 new GraphQLAppliedDirective
                                 {
                                     Name = "deprecated",
-                                    Args = new List<GraphQLDirectiveArgument>
-                                    {
+                                    Args =
+                                    [
                                         new GraphQLDirectiveArgument
                                         {
                                             Name = "reason",
                                             Value = "\"Do not use this field\""
                                         }
-                                    }
+                                    ]
                                 }
-                            }
+                            ]
                         }
-                    }
+                    ]
                 },
                 new GraphQLType
                 {
                     Name = "Person",
                     Kind = GraphQLTypeKind.OBJECT,
-                    Fields = new List<GraphQLField>
-                    {
+                    Fields =
+                    [
                         new GraphQLField
                         {
                             Name = "name",
@@ -228,9 +228,9 @@ public class ASTConverterTests
                                 Name = "String"
                             }
                         }
-                    }
+                    ]
                 },
-            }
+            ]
         };
 
         string sdl = schema.Print();
@@ -243,8 +243,8 @@ public class ASTConverterTests
     {
         var schema = new GraphQLSchema
         {
-            Types = new List<GraphQLType>
-            {
+            Types =
+            [
                 new GraphQLType
                 {
                     Kind = GraphQLTypeKind.SCALAR,
@@ -254,15 +254,15 @@ public class ASTConverterTests
                 {
                     Kind = GraphQLTypeKind.SCALAR,
                     Name = "JSON",
-                    AppliedDirectives = new List<GraphQLAppliedDirective>
-                    {
+                    AppliedDirectives =
+                    [
                         new GraphQLAppliedDirective
                         {
                             Name = "some"
                         }
-                    }
+                    ]
                 }
-            }
+            ]
         };
 
         string sdl = schema.Print(new ASTConverterOptions { TypeComparer = null });
@@ -275,8 +275,8 @@ public class ASTConverterTests
     {
         var schema = new GraphQLSchema
         {
-            Directives = new List<GraphQLDirective>
-            {
+            Directives =
+            [
                 // invalid usage, but should not throw
                 new GraphQLDirective
                 {
@@ -287,34 +287,34 @@ public class ASTConverterTests
                 new GraphQLDirective
                 {
                     Name = "without_location2",
-                    Locations = new List<GraphQLDirectiveLocation>(),
+                    Locations = [],
                 },
                 new GraphQLDirective
                 {
                     Name = "my",
-                    Locations = new List<GraphQLDirectiveLocation>
-                    {
+                    Locations =
+                    [
                         GraphQLDirectiveLocation.QUERY
-                    }
+                    ]
                 },
                 new GraphQLDirective
                 {
                     Name = "your",
                     IsRepeatable = true,
-                    Locations = new List<GraphQLDirectiveLocation>
-                    {
+                    Locations =
+                    [
                         GraphQLDirectiveLocation.ENUM
-                    }
+                    ]
                 },
                 new GraphQLDirective
                 {
                     Name = "my_with_args",
-                    Locations = new List<GraphQLDirectiveLocation>
-                    {
+                    Locations =
+                    [
                         GraphQLDirectiveLocation.QUERY
-                    },
-                    Args = new List<GraphQLArgument>
-                    {
+                    ],
+                    Args =
+                    [
                         new GraphQLArgument
                         {
                             Name = "if",
@@ -323,18 +323,18 @@ public class ASTConverterTests
                                 Name = "Boolean"
                             }
                         }
-                    }
+                    ]
                 },
                 new GraphQLDirective
                 {
                     Name = "your_with_args",
                     IsRepeatable = true,
-                    Locations = new List<GraphQLDirectiveLocation>
-                    {
+                    Locations =
+                    [
                         GraphQLDirectiveLocation.ENUM
-                    },
-                    Args = new List<GraphQLArgument>
-                    {
+                    ],
+                    Args =
+                    [
                         new GraphQLArgument
                         {
                             Name = "if",
@@ -343,9 +343,9 @@ public class ASTConverterTests
                                 Name = "Boolean"
                             }
                         }
-                    }
+                    ]
                 }
-            }
+            ]
         };
 
         string sdl = schema.Print(new ASTConverterOptions
@@ -376,13 +376,13 @@ public class ASTConverterTests
     {
         var schema = new GraphQLSchema
         {
-            AppliedDirectives = new List<GraphQLAppliedDirective>
-            {
+            AppliedDirectives =
+            [
                 new GraphQLAppliedDirective
                 {
                     Name = "my"
                 }
-            }
+            ]
         };
 
         string sdl = schema.Print(new ASTConverterOptions { PrintAppliedDirectives = false });
@@ -458,14 +458,14 @@ public class ASTConverterTests
     {
         var schema = new GraphQLSchema
         {
-            Types = new List<GraphQLType>
-            {
+            Types =
+            [
                 new GraphQLType
                 {
                     Kind = GraphQLTypeKind.ENUM,
                     Name = "Color",
-                    EnumValues = new List<GraphQLEnumValue>
-                    {
+                    EnumValues =
+                    [
                         new GraphQLEnumValue
                         {
                             Name = "RED"
@@ -479,22 +479,22 @@ public class ASTConverterTests
                         new GraphQLEnumValue
                         {
                             Name = "BLUE",
-                            AppliedDirectives = new List<GraphQLAppliedDirective>
-                            {
+                            AppliedDirectives =
+                            [
                                 new GraphQLAppliedDirective
                                 {
                                     Name = "some"
                                 }
-                            }
+                            ]
                         }
-                    }
+                    ]
                 },
                 new GraphQLType
                 {
                     Kind = GraphQLTypeKind.ENUM,
                     Name = "Status",
-                    EnumValues = new List<GraphQLEnumValue>
-                    {
+                    EnumValues =
+                    [
                         new GraphQLEnumValue
                         {
                             Name = "Ok"
@@ -503,16 +503,16 @@ public class ASTConverterTests
                         {
                             Name = "Error",
                         }
-                    },
-                    AppliedDirectives = new List<GraphQLAppliedDirective>
-                    {
+                    ],
+                    AppliedDirectives =
+                    [
                         new GraphQLAppliedDirective
                         {
                             Name = "v2"
                         }
-                    }
+                    ]
                 }
-            }
+            ]
         };
 
         string sdl1 = schema.Print();
@@ -527,14 +527,14 @@ public class ASTConverterTests
     {
         var schema = new GraphQLSchema
         {
-            Types = new List<GraphQLType>
-            {
+            Types =
+            [
                 new GraphQLType
                 {
                     Kind = GraphQLTypeKind.ENUM,
                     Name = "Color",
                 }
-            }
+            ]
         };
 
         string sdl1 = schema.Print();
@@ -549,14 +549,14 @@ public class ASTConverterTests
     {
         var schema = new GraphQLSchema
         {
-            Types = new List<GraphQLType>
-            {
+            Types =
+            [
                 new GraphQLType
                 {
                     Kind = GraphQLTypeKind.UNION,
                     Name = "Reason",
                 }
-            }
+            ]
         };
 
         string sdl1 = schema.Print();
@@ -571,14 +571,14 @@ public class ASTConverterTests
     {
         var schema = new GraphQLSchema
         {
-            Types = new List<GraphQLType>
-            {
+            Types =
+            [
                 new GraphQLType
                 {
                     Kind = GraphQLTypeKind.INPUT_OBJECT,
                     Name = "Person",
                 }
-            }
+            ]
         };
 
         string sdl1 = schema.Print();
@@ -593,13 +593,13 @@ public class ASTConverterTests
     {
         var schema = new GraphQLSchema
         {
-            Types = new List<GraphQLType>
-            {
+            Types =
+            [
                 new GraphQLType
                 {
                     Name = "Query",
-                    Fields = new List<GraphQLField>
-                    {
+                    Fields =
+                    [
                         new GraphQLField
                         {
                             Name = "field1",
@@ -616,25 +616,25 @@ public class ASTConverterTests
                             {
                                 Name = "String"
                             },
-                            AppliedDirectives = new List<GraphQLAppliedDirective>
-                            {
+                            AppliedDirectives =
+                            [
                                 new GraphQLAppliedDirective
                                 {
                                     Name = "deprecated",
-                                    Args = new List<GraphQLDirectiveArgument>
-                                    {
+                                    Args =
+                                    [
                                         new GraphQLDirectiveArgument
                                         {
                                             Name = "reason",
                                             Value = "\"Reason that should be escaped: \\\", \\\\, \\b, \\f, \\n, \\r, \\t \\u0005 \"" // escaped string value
                                         }
-                                    }
+                                    ]
                                 }
-                            }
+                            ]
                         }
-                    }
+                    ]
                 }
-            }
+            ]
         };
 
         string sdl = schema.Print();
