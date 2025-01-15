@@ -32,11 +32,11 @@ type Mutation {
 }
 
 input Person {
-  name: String!
+  name: String
   age: Int!
   isDeveloper: Boolean @deprecated(reason: "Use job title instead")
   isManager: Boolean @deprecated(reason: "Use job title instead")
-  jobTitle: String!
+  jobTitle: String
 }
 
 type Query {

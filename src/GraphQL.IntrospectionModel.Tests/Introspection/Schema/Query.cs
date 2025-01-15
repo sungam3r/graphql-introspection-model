@@ -6,8 +6,8 @@ internal sealed class Query : ObjectGraphType
 {
     public Query()
     {
-        Field<StringGraphType>("hello").Resolve(_ => "Hello, World!").Directive("author", "name", "Alice");
-        Field<NonNullGraphType<StringGraphType>>("word").Resolve(_ => "abcdef").Directive("revert").Directive("revert");
+        Field<StringGraphType>("hello").Resolve(_ => "Hello, World!").ApplyDirective("author", "name", "Alice");
+        Field<NonNullGraphType<StringGraphType>>("word").Resolve(_ => "abcdef").ApplyDirective("revert").ApplyDirective("revert");
         Field<CatOrDogGraphType>("catOrDog");
     }
 }
