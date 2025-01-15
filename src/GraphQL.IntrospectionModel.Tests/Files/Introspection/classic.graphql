@@ -32,9 +32,9 @@ type Mutation {
 }
 
 input Person {
-  name: String!
+  name: String
   age: Int!
-  jobTitle: String!
+  jobTitle: String
 }
 
 type Query {

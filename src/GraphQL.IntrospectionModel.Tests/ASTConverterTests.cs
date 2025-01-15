@@ -407,6 +407,7 @@ public class ASTConverterTests
             schema {
               query: MyQuery
             }
+
             """);
     }
 
@@ -427,6 +428,7 @@ public class ASTConverterTests
             schema {
               mutation: MyMutation
             }
+
             """);
     }
 
@@ -447,6 +449,7 @@ public class ASTConverterTests
             schema {
               subscription: MySubscription
             }
+
             """);
     }
 
@@ -537,6 +540,7 @@ public class ASTConverterTests
         string sdl1 = schema.Print();
         sdl1.ShouldBe("""
             enum Color
+
             """);
     }
 
@@ -558,6 +562,7 @@ public class ASTConverterTests
         string sdl1 = schema.Print();
         sdl1.ShouldBe("""
             union Reason
+
             """);
     }
 
@@ -579,6 +584,7 @@ public class ASTConverterTests
         string sdl1 = schema.Print();
         sdl1.ShouldBe("""
             input Person
+
             """);
     }
 
