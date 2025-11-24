@@ -24,7 +24,7 @@ jobs:
           show-progress: false
           fetch-depth: 0
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
           source-url: https://nuget.pkg.github.com/sungam3r/index.json
@@ -40,7 +40,7 @@ jobs:
         working-directory: src
         run: dotnet pack --no-build -c Release -o out
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Nuget packages
           path: |
