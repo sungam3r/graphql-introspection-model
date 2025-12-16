@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GraphQL.MicrosoftDI" Version="8.8.0" />
+    <PackageReference Include="GraphQL.MicrosoftDI" Version="8.8.1" />
     <PackageReference Include="GraphQL.SystemTextJson" Version="8.8.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
