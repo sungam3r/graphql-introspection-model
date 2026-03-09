@@ -2,29 +2,24 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <NoWarn>$(NoWarn);1591;CA1707;IDE1006</NoWarn>
+    <NoWarn>$(NoWarn);CS1591;CA1707;IDE1006</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" Version="8.0.0" PrivateAssets="all" />
     <PackageReference Include="GraphQL.MicrosoftDI" Version="8.8.3" />
     <PackageReference Include="GraphQL.SystemTextJson" Version="8.8.3" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-    <PackageReference Include="Shouldly" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
     <PackageReference Include="PublicApiGenerator" Version="11.5.4" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="coverlet.msbuild" Version="6.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Shouldly" Version="4.3.0" />
+    <PackageReference Include="xunit" Version="2.9.3" PrivateAssets="all" />
+    <PackageReference Include="xunit.analyzers" Version="1.27.0" PrivateAssets="all" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GraphQL.IntrospectionModel\GraphQL.IntrospectionModel.csproj" />
+    <ProjectReference Include="../GraphQL.IntrospectionModel/GraphQL.IntrospectionModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>

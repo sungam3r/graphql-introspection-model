@@ -5,17 +5,21 @@
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
     <Authors>Maximov Ivan</Authors>
+    <ProductName>GraphQL.IntrospectionModel</ProductName>
+    <PackageReleaseNotes>See https://github.com/sungam3r/graphql-introspection-model/releases</PackageReleaseNotes>
+    <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
     <Copyright>Copyright © $(Authors) 2019-$(CurrentYear)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageIcon>logo.64x64.png</PackageIcon>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/sungam3r/graphql-introspection-model/refs/heads/master/assets/icon.png</PackageIconUrl>
     <DebugType>embedded</DebugType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!-- https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables -->
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">True</ContinuousIntegrationBuild>
+    <PackageTags>GraphQL;Introspection;SDL</PackageTags>
     <Nullable>enable</Nullable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
@@ -24,9 +28,15 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
-    <None Include="..\..\assets\logo.64x64.png" Pack="true" PackagePath="\" Visible="false" />
-    <None Include="..\..\README.md" Pack="true" PackagePath="\" Visible="false" />
+    <None Include="../../assets/icon.png" Pack="true" PackagePath="\" Visible="false" />
+    <None Include="../../README.md" Pack="true" PackagePath="\" Visible="false" />
     <PackageReference Include="MinVer" Version="7.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetProjectFile.Analyzers" Version="1.9.0" PrivateAssets="all" />
+    <PackageReference Include="Roslynator.Analyzers" Version="4.15.0" PrivateAssets="all" />
+    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.15.0" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>
