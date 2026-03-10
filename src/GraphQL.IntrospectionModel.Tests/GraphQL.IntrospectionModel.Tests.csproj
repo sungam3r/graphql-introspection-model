@@ -9,7 +9,7 @@
     <PackageReference Include="coverlet.msbuild" Version="8.0.0" PrivateAssets="all" />
     <PackageReference Include="GraphQL.MicrosoftDI" Version="8.8.4" />
     <PackageReference Include="GraphQL.SystemTextJson" Version="8.8.4" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
     <PackageReference Include="PublicApiGenerator" Version="11.5.4" />
     <PackageReference Include="Shouldly" Version="4.3.0" />
